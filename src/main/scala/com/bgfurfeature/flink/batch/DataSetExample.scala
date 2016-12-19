@@ -10,7 +10,6 @@ object DataSetExample {
   def main(args: Array[String]) {
 
     val batchEnv = ExecutionEnvironment.getExecutionEnvironment
-
     // Delta Iterations
     // read the initial data sets
     val initialSolutionSet: DataSet[(Long, Double)] = batchEnv.fromElements((1L,1.0))

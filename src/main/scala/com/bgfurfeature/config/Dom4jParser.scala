@@ -3,7 +3,6 @@ package com.bgfurfeature.config
 import java.io.File
 
 import com.bgfurfeature.log.CLogger
-import com.bigchange.log.CLogger
 import org.dom4j.io.SAXReader
 import org.dom4j.{Document, Element}
 
