@@ -1,4 +1,4 @@
-package com.bgfurfeature.batch
+package com.bgfurfeature.flink.batch
 
 import org.apache.flink.api.scala.{DataSet, ExecutionEnvironment}
 

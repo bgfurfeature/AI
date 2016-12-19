@@ -1,4 +1,4 @@
-package com.bgfurfeature.ml
+package com.bgfurfeature.flink.ml
 
 /**
   * Created by C.J.YOU on 2016/11/22.

@@ -1,4 +1,4 @@
-package com.bgfurfeature.streaming
+package com.bgfurfeature.flink.streaming
 
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 
