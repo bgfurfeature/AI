@@ -15,6 +15,7 @@ object SHStockHeat {
     val data = ds.filter(!_.contains("youchaojiang")).map(x => x.split("\t")).filter(x => x.length >= 7)
       .map(x => (TimeUtil.getMinute(x(0)) + "\t" + x(1), StockMatcherRegex.VisitAndSearch(x), x(2) + "\t" + x(3) + "\t" + x(4)))
       .filter(x => x._2 != null).map(x => x._1 + "\t" + x._2 + "\t" + x._3)
+
     // (tsMin + "\t" + ad , stock + "\t" + ts + "\t" + type, ua + "\t" + host + "\t" + url)
 
     data
