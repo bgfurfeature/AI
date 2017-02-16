@@ -1,9 +1,7 @@
-package com.usercase
+package com.usercase.stock
 
 import com.bgfurfeature.util.{FileUtil, TimeUtil}
-import com.usercase.stock.StockMatcherRegex
-import org.apache.flink.api.scala.{DataSet, ExecutionEnvironment}
-import org.apache.flink.api.scala._
+import org.apache.flink.api.scala.{DataSet, ExecutionEnvironment, _}
 /**
   * Created by C.J.YOU on 2016/12/30.
   */
