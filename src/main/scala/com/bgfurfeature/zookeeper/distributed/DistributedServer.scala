@@ -39,6 +39,7 @@ class DistributedServer {
     */
   def registerServer(hostname: String)= {
 
+    // 临时server节点， 当出现服务下线断开连接时，对应的节点会自动删除掉
     val create = zk.create(parentNode + "/server", hostname.getBytes(),
       Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL)
     System.out.println(hostname + "is online.." + create)

@@ -67,6 +67,7 @@ class DistributedClientLock {
     //如果争抢资源的程序就只有自己，则可以直接去访问共享资源 
     if (childrenNodes.size() == 1) {
       doSomething()
+      // 重新注册一把新的锁
       thisPath = zk.create("/" + groupNode + "/" + subNode, null, Ids.OPEN_ACL_UNSAFE,
         CreateMode.EPHEMERAL_SEQUENTIAL)
     }
