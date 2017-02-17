@@ -41,12 +41,13 @@ class DistributedClient {
 
     // 获取服务器子节点信息，并且对父节点进行监听
     val children = zk.getChildren(parentNode, true)
-
+    val childrenLength = children.size()
     // 先创建一个局部的list来存服务器信息
     val servers = new util.ArrayList[String]()
-    for (child <- children) {
+
+    for (child <- 0 until childrenLength) {
       // child只是子节点的节点名
-      val data = zk.getData(parentNode + "/" + child, false, null)
+      val data = zk.getData(parentNode + "/" + children.get(child), false, null)
       servers.add(new String(data))
     }
     // 把servers赋值给成员变量serverList，已提供给各业务线程使用

@@ -3,9 +3,9 @@ package com.bgfurfeature.io
 /**
   * Created by C.J.YOU on 2017/2/16.
   */
+import java.io.{File => JFile}
+
 import better.files._
-import java.io.{File => JFile, _}
-import java.nio.MappedByteBuffer
 
 /**
   * 对Java NIO库进行了包装，不依赖其它的第三方库
@@ -33,7 +33,7 @@ class BetterFiles {
     file << "world" // same as file.appendLines("world")
     assert(file == "hello\nworld")
 
-    "hello" `>:` file
+    // "hello" `>:` file
     "world" >>: file
     val bytes: Array[Byte] = file.loadBytes
 
@@ -71,7 +71,7 @@ class BetterFiles {
     val path : java.nio.file.Path = file.path
     val fs : java.nio.file.FileSystem = file.fileSystem
     val channel : java.nio.channels.FileChannel = file.newFileChannel
-    val ram : java.io.RandomAccessFile = file.newRandomAccess(File.RandomAccessMode)
+    //  val ram : java.io.RandomAccessFile = file.newRandomAccess(File.RandomAccessMode)
     val fr : java.io.FileReader = file.newFileReader
     val fw : java.io.FileWriter = file.newFileWriter(append = true)
     val printer : java.io.PrintWriter = file.newPrintWriter(true)
@@ -123,8 +123,7 @@ class BetterFiles {
     File.newTemporaryDirectory() / File.newTemporaryFile() // create temp dir/file  */
 
 
-    // UNIX DSL
-    import  Cmds._ // must import Cmds._ to bring in these utils
+    // UNIX DSL // must import Cmds._ to bring in these utils
     /*pwd / cwd // current dir
     cp(file1, file2)
     mv(file1, file2)

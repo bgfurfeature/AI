@@ -42,8 +42,9 @@ class SimpleZKClient {
   // 获取子节点
   def getChildren(znode: Znode) = {
     val childrens = zkClient.getChildren(znode.nodeName, true)
-    for(children <- childrens) {
-      println(children)
+    val length = childrens.size()
+    for(children <- 0 until length) {
+      println(childrens.get(children))
     }
   }
 
