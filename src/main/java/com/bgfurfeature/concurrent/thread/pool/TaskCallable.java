@@ -12,7 +12,7 @@ public class TaskCallable implements Callable<String>{
 	}
 
 	// 线程有返回值
-	@Override
+
 	public String call() throws Exception {
 		String name = Thread.currentThread().getName();
 		long currentTimeMillis = System.currentTimeMillis();

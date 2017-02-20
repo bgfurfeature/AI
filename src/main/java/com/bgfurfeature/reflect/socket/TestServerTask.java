@@ -21,7 +21,9 @@ public class TestServerTask implements Runnable{
 	public void run() {
 		InputStream in;
 		OutputStream out;
+
 		try {
+
 			in = socket.getInputStream();
 			out = socket.getOutputStream();
 			
@@ -35,12 +37,12 @@ public class TestServerTask implements Runnable{
 			Class<?> forName = Class.forName(className);
 			System.out.println("calling class: " + forName + " for client:" + socket.getInetAddress());
 			Object newInstance = forName.newInstance();
-			Method method = forName.getMethod(methodName,String.class);
+			Method method =forName.getMethod(methodName,String.class);
 			System.out.println("calling method: " + method);
 			Object invoke = method.invoke(newInstance, methodParam);
 			System.out.println("results: " + Integer.parseInt(invoke.toString()));
 
-			// Sleep
+			// over dealing with request
 			System.out.println("server deal with client request over...");
 
 			PrintWriter pw = new PrintWriter(new BufferedOutputStream(out));
