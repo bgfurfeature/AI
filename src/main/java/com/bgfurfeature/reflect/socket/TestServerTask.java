@@ -37,7 +37,7 @@ public class TestServerTask implements Runnable{
 			Class<?> forName = Class.forName(className);
 			System.out.println("calling class: " + forName + " for client:" + socket.getInetAddress());
 			Object newInstance = forName.newInstance();
-			Method method =forName.getMethod(methodName,String.class);
+			Method method = forName.getMethod(methodName,String.class);
 			System.out.println("calling method: " + method);
 			Object invoke = method.invoke(newInstance, methodParam);
 			System.out.println("results: " + Integer.parseInt(invoke.toString()));
