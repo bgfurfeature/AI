@@ -1,9 +1,7 @@
-package com.usercase
+package com.usercase.stock
 
 import com.bgfurfeature.util.{FileUtil, TimeUtil}
-import com.usercase.stock.StockMatcherRegex
-import org.apache.flink.api.scala.{DataSet, ExecutionEnvironment}
-import org.apache.flink.api.scala._
+import org.apache.flink.api.scala.{DataSet, ExecutionEnvironment, _}
 /**
   * Created by C.J.YOU on 2016/12/30.
   */
@@ -15,6 +13,7 @@ object SHStockHeat {
     val data = ds.filter(!_.contains("youchaojiang")).map(x => x.split("\t")).filter(x => x.length >= 7)
       .map(x => (TimeUtil.getMinute(x(0)) + "\t" + x(1), StockMatcherRegex.VisitAndSearch(x), x(2) + "\t" + x(3) + "\t" + x(4)))
       .filter(x => x._2 != null).map(x => x._1 + "\t" + x._2 + "\t" + x._3)
+
     // (tsMin + "\t" + ad , stock + "\t" + ts + "\t" + type, ua + "\t" + host + "\t" + url)
 
     data

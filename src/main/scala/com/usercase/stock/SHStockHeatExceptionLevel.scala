@@ -1,4 +1,4 @@
-package com.usercase
+package com.usercase.stock
 
 import com.bgfurfeature.config.Dom4jParser
 import com.bgfurfeature.kafka.{KafkaConsumer, KafkaProducer}
