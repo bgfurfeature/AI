@@ -1,4 +1,4 @@
-package com.kunyan.telecom;
+package com.bgfurfeature.hive;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,7 @@ import org.apache.hadoop.io.Text;
 /**
  * hive udf function template
  */
-public class UrlFilterUDF extends UDF {
+public class JUrlFilterUDF extends UDF {
 
 	private static ArrayList<String> visitAndSearch = new ArrayList<String>(Arrays.asList(
 			// 搜
