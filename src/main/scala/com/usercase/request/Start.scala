@@ -31,7 +31,7 @@ object Start {
 
     val requestHeaderPath = "F:\\datatest\\telecom\\wokong\\header"
 
-    val myFlect = new RespondParserReflect("com.usercase.request.parser.RespondParser")
+    val myFlect = new RespondParserReflect("com.usercase.request.parser.FXRespondParser")
 
     val data = Source.fromFile(requestHeaderPath).getLines().toList
 
