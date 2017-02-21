@@ -10,9 +10,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import com.bgfurfeature.netty.coder.PersonDecoder;
 
 /**
+ * 接收客户端发的序列化数据，进行反序列化
  * • 配置服务器功能，如线程、端口
  * • 实现服务器处理程序，它包含业务逻辑，决定当有一个请求连接或接收数据时该做什么
- *
  */
 public class EchoServer {
 

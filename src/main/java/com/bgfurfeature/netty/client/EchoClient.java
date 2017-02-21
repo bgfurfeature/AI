@@ -13,6 +13,7 @@ import java.net.InetSocketAddress;
 import com.bgfurfeature.netty.coder.PersonEncoder;
 
 /**
+ * 写object到服务器，对象object需序列化
  * • 连接服务器
  * • 写数据到服务器
  * • 等待接受服务器返回相同的数据
@@ -49,7 +50,7 @@ public class EchoClient {
 									// 注册编码的handler
 									ch.pipeline().addLast(new PersonEncoder());  // out 序列化对象
 									//注册处理消息的handler
-									ch.pipeline().addLast(new EchoClientHandler());   //in
+									ch.pipeline().addLast(new EchoClientHandler());   // in
 								}
 							});
 			// • 调用Bootstrap.connect()来连接服务器
