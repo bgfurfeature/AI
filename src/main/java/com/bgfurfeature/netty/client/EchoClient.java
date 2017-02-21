@@ -34,7 +34,8 @@ public class EchoClient {
 		try {
 			// 创建Bootstrap对象用来引导启动客户端
 			Bootstrap bootstrap = new Bootstrap();
-			// 创建EventLoopGroup对象并设置到Bootstrap中，EventLoopGroup可以理解为是一个线程池，这个线程池用来处理连接、接受数据、发送数据
+			// 创建EventLoopGroup对象并设置到Bootstrap中，EventLoopGroup可以理解为是一个线程池，
+			// 这个线程池用来处理连接、接受数据、发送数据
 			nioEventLoopGroup = new NioEventLoopGroup();
 			// 创建InetSocketAddress并设置到Bootstrap中，InetSocketAddress是指定连接的服务器地址
 			bootstrap.group(nioEventLoopGroup)//

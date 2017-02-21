@@ -31,8 +31,10 @@ public class EchoServer {
 			eventLoopGroup = new NioEventLoopGroup();
 			//指定通道类型为NioServerSocketChannel，一种异步模式，OIO阻塞模式为OioServerSocketChannel
 			//设置InetSocketAddress让服务器监听某个端口已等待客户端连接。
-			serverBootstrap.group(eventLoopGroup).channel(NioServerSocketChannel.class).localAddress("localhost",port)
-			.childHandler(new ChannelInitializer<Channel>() {
+			serverBootstrap.group(eventLoopGroup)
+					.channel(NioServerSocketChannel.class)
+					.localAddress("localhost",port)
+					.childHandler(new ChannelInitializer<Channel>() {
 				//设置childHandler执行所有的连接请求
 				@Override
 				protected void initChannel(Channel ch) throws Exception {
