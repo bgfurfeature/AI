@@ -8,6 +8,8 @@ package com.bgfurfeature.rpc.hadoop.protocol;
  * 一种类似基于某个服务的通信协议
  * 客户端： 知道这个协议的存在
  * 服务端： 提供给协议的实现
+ *
+ * rpc 组成： client， protocol， server
  */
 public interface SomeService {
 
