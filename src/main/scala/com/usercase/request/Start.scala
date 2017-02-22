@@ -1,10 +1,10 @@
 package com.usercase.request
 
-import com.usercase.request.http.HttpData
+import com.bgfurfeature.config.Dom4jParser
+import com.usercase.request.http.{HttpData, Notice}
 import com.usercase.request.parser.RespondParserReflect
-import org.json.JSONObject
+import com.usercase.request.util.TypeTransform
 
-import scala.collection.mutable
 import scala.io.Source
 
 /**
@@ -12,44 +12,43 @@ import scala.io.Source
   */
 object Start {
 
-  private var httpData: HttpData = null
-
-  // List -> HashMap
-  def listToHashMap(p: List[String]) = {
-    val map = new mutable.HashMap[String, String]()
-    p.foreach { item =>
-      map.+=(Tuple2(item.split("=")(0),item.split("=")(1)))
-    }
-    map
-  }
-
   def main(args: Array[String]) {
 
-    val xmlFile = ""
+    val Array(xmlFile) = args
 
-    val httpRequestFilePath = "F:\\datatest\\telecom\\wokong\\http"
+    val parser = Dom4jParser.apply(xmlFilePath = xmlFile)
 
-    val requestHeaderPath = "F:\\datatest\\telecom\\wokong\\header"
+    val httpRequestFilePath = parser.getParameterByTagName("File.url")
 
-    val myFlect = new RespondParserReflect("com.usercase.request.parser.FXRespondParser")
+    val requestHeaderPath = parser.getParameterByTagName("File.header")
 
-    val data = Source.fromFile(requestHeaderPath).getLines().toList
+    val reflectClassName = parser.getParameterByTagName("RelectClass.FX")
+    val reflectClassName2 = parser.getParameterByTagName("RelectClass.WK")
 
-    httpData = new HttpData(data(0), data(1))
+    val myFlectfx = new RespondParserReflect(reflectClassName)
+
+    val myFlectwk = new RespondParserReflect(reflectClassName2)
+
+    val header = Source.fromFile(requestHeaderPath).getLines().toList
+
+    val httpData = HttpData.apply(header(0), "", parser)
+
+    Notice.apply(parser)
 
     Source.fromFile(httpRequestFilePath).getLines().foreach{ line =>
 
       val ls = line.split("\t")
       val http = ls(0)
-      val param = listToHashMap(ls(1).split(",").toList)
+      val param = TypeTransform.listToHashMap(ls(1).split("&").toList)
       val method = ls(2)
 
+      println(ls.foreach(println))
 
-      val res = myFlect.runMethod(method, http, param, httpData).split("=")(1)
+      val res = myFlectfx.runMethod(method, http, param, httpData)
 
-      val jSONObject = new JSONObject(res).getJSONObject("result")
+      // val res2 = myFlectwk.runMethod(method, http, param, httpData)
 
-      println(jSONObject.getJSONObject("code_info").getJSONArray("ehf_").length())
+      println(res)
 
     }
   }
