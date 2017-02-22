@@ -17,21 +17,20 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
     val data = new JSONObject(resp)
 
+
+
     val status = data.getJSONObject("head").get("status").toString
 
     if( status == "1") {
 
-      val body = data.getJSONObject("body").getJSONObject("check").getJSONObject("prompt").getJSONArray("basic").length()
+      val body = data.getJSONObject("body").getJSONObject("prompt").getJSONArray("basic").length()
 
-      url + " : " + body > 0 + " : " + body
+      url + " : " + (body > 0 )+ " : " + body
 
     } else
 
       url + " : " + false + " : " + ""
 
-    println(data)
-
-    ""
   }
 
   // 获取回测结果

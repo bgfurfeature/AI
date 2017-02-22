@@ -42,7 +42,7 @@ object Start {
       val param = TypeTransform.listToHashMap(ls(1).split("&").toList)
       val method = ls(2)
 
-      println(ls.foreach(println))
+      // println(ls.foreach(println))
 
       val res = myFlectfx.runMethod(method, http, param, httpData)
 

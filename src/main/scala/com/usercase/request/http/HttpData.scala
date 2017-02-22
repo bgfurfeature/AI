@@ -124,7 +124,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) {
 
     val finalUrl = getUrl(strUrl, parameters)
 
-    println(finalUrl)
+    // println(finalUrl)
 
     val respond = Jsoup.connect(finalUrl)
       .timeout(10000)
