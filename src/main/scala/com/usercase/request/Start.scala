@@ -3,7 +3,7 @@ package com.usercase.request
 import com.bgfurfeature.config.Dom4jParser
 import com.usercase.request.http.{HttpData, Notice}
 import com.usercase.request.parser.RespondParserReflect
-import com.usercase.request.util.TypeTransform
+import com.usercase.request.util.{RespondTime, TypeTransform}
 
 import scala.io.Source
 
@@ -11,6 +11,54 @@ import scala.io.Source
   * Created by C.J.YOU on 2017/2/21.
   */
 object Start {
+
+
+  private  var httpData:HttpData = null
+
+  // 加载数据文件(生成http请求链接)
+  def loadTestData(hy:String, stock:String, gn: String) =  {
+
+    val stocks = Source.fromFile(stock).getLines().toList
+
+    val hys = Source.fromFile(hy).getLines().toList
+
+    val gns = Source.fromFile(gn).getLines().toList
+
+    stocks.foreach{ x =>
+
+    }
+
+
+  }
+
+  // 请求接口
+  def httpTest(fileName:String, rclass:RespondParserReflect) = {
+
+    Source.fromFile(fileName).getLines().foreach{ line =>
+
+      val ls = line.split("\t")
+      val http = ls(0)
+
+      val param = TypeTransform.listToHashMap(ls(1).split("&").toList)
+
+      val method = ls(2)
+
+      // println(ls.foreach(println))
+
+      val parameter = (method, http, param, httpData)
+
+      val result = RespondTime.time(parameter, rclass.runMethod)
+
+
+      println(result)
+
+      /*if(result.get("status").toString != "true")
+        println(result)*/
+
+
+
+    }
+  }
 
   def main(args: Array[String]) {
 
@@ -20,9 +68,12 @@ object Start {
 
     val httpRequestFilePath = parser.getParameterByTagName("File.url")
 
+    val wkhttpRequestFilePath = parser.getParameterByTagName("File.url_wk")
+
     val requestHeaderPath = parser.getParameterByTagName("File.header")
 
     val reflectClassName = parser.getParameterByTagName("RelectClass.FX")
+
     val reflectClassName2 = parser.getParameterByTagName("RelectClass.WK")
 
     val myFlectfx = new RespondParserReflect(reflectClassName)
@@ -31,26 +82,19 @@ object Start {
 
     val header = Source.fromFile(requestHeaderPath).getLines().toList
 
-    val httpData = HttpData.apply(header(0), "", parser)
+    httpData = HttpData.apply(header(0), "", parser)
 
     Notice.apply(parser)
 
-    Source.fromFile(httpRequestFilePath).getLines().foreach{ line =>
 
-      val ls = line.split("\t")
-      val http = ls(0)
-      val param = TypeTransform.listToHashMap(ls(1).split("&").toList)
-      val method = ls(2)
+    // FX test
 
-      // println(ls.foreach(println))
+    // httpTest(httpRequestFilePath, myFlectfx)
 
-      val res = myFlectfx.runMethod(method, http, param, httpData)
+    // wk test
 
-      // val res2 = myFlectwk.runMethod(method, http, param, httpData)
+    httpTest(wkhttpRequestFilePath, myFlectwk)
 
-      println(res)
-
-    }
   }
 
 }
