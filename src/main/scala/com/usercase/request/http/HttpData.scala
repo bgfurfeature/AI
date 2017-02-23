@@ -1,5 +1,6 @@
 package com.usercase.request.http
 
+import java.net.SocketTimeoutException
 import java.util
 
 import com.bgfurfeature.config.Dom4jParser
@@ -107,14 +108,28 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) {
 
   def requestWK(strUrl:String, parameters:scala.collection.mutable.HashMap[String,String]): String = {
 
+    var respond = ""
+
     val finalUrl = getUrl(strUrl, parameters)
 
-    val respond = Jsoup.connect(finalUrl)
-      .timeout(5000)
-      .userAgent(userAgent)
-      .cookies(getCookies(getCookie))
-      .execute()
-      .body()
+    println("finalUrl: " + finalUrl)
+
+    var connect = Jsoup.connect(strUrl).timeout(5000)
+
+    try {
+
+      parameters.foreach { case (key, v) =>
+        connect = connect.data(key,v)
+      }
+      respond = connect.userAgent(userAgent)
+        .method(Method.POST)
+        .cookies(getCookies(getCookie))
+        .execute()
+        .body()
+    } catch {
+      case e:SocketTimeoutException =>
+
+    }
 
     respond
 
@@ -124,12 +139,17 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) {
 
     val finalUrl = getUrl(strUrl, parameters)
 
-    // println(finalUrl)
+    var respond = ""
+    println("finalUrl: " + finalUrl)
 
-    val respond = Jsoup.connect(finalUrl)
-      .timeout(10000)
-      .execute()
-      .body()
+    try {
+       respond = Jsoup.connect(finalUrl)
+        .timeout(10000)
+        .execute()
+        .body()
+    } catch  {
+      case e: Exception =>
+    }
 
     respond
 

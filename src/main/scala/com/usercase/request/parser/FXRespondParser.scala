@@ -8,7 +8,8 @@ import org.json.JSONObject
   */
 class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashMap[String,String], _responder: HttpData){
 
-  // 定义同http请求返回数据的解析函数(返回： url + 异常与否 + 中间结果 + 相应时间)
+
+  // 定义同http请求返回数据的解析函数(返回： url + 异常与否 + 中间结果)
 
   // 模糊搜索
   def btsearch = {
@@ -18,18 +19,17 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
     val data = new JSONObject(resp)
 
 
-
     val status = data.getJSONObject("head").get("status").toString
 
     if( status == "1") {
 
       val body = data.getJSONObject("body").getJSONObject("prompt").getJSONArray("basic").length()
 
-      url + " : " + (body > 0 )+ " : " + body
+      Result.resultFormat(url , (body > 0).toString, body.toString)
 
     } else
 
-      url + " : " + false + " : " + ""
+      Result.resultFormat(url , "false", "None")
 
   }
 
@@ -40,7 +40,7 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
     url = "http://61.147.114.67/cgi-bin/backtest/kensho/1/btsentence.fcgi?start_time=2016-05-12&end_time=2016-09-12&sonditions=[]&base_sessionid=-1"
 
-    val sessionid = btsentence.split(" : ")(2)
+    val sessionid = btsentence.get("result").toString
 
     if(sessionid != "") {
 
@@ -56,11 +56,11 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
         val operate_code = data.getJSONObject("head").get("operate_code")
 
-        url + " : " + (operate_code != "") + " : " + ""
+        Result.resultFormat(url , (operate_code != "" ).toString, operate_code.toString)
 
       } else
 
-        url + " : " + false + " : " + ""
+        Result.resultFormat(url , "false", "None")
 
     }
 
@@ -73,7 +73,7 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
      url = "http://61.147.114.67/cgi-bin/backtest/kensho/1/btsentence.fcgi?start_time=2016-05-12&end_time=2016-09-12&sonditions=[]&base_sessionid=-1"
 
-    val sessionid = btsentence.split(" : ")(2)
+    val sessionid = btsentence.get("result").toString
 
     if(sessionid != "") {
 
@@ -90,11 +90,11 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
         val operate_code = data.getJSONObject("head").get("operate_code")
 
-        url + " : " + (operate_code != "") + " : " + ""
+        Result.resultFormat(url , (operate_code != "" ).toString, operate_code.toString)
 
       } else
 
-        url + " : " + false + " : " + ""
+        Result.resultFormat(url , "false", "None")
 
     }
 
@@ -113,11 +113,11 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
       val body = data.getJSONObject("body").get("bt_session")
 
-      url + " : " + (body != "") + " : " + body
+      Result.resultFormat(url , (body!= "").toString, body.toString)
 
     } else
 
-      url + " : " + false + " : " + ""
+      Result.resultFormat(url , "false", "None")
   }
 
 
@@ -128,7 +128,7 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
   }
   // 获取更多语句
-  def allsuggest: String = {
+  def allsuggest  = {
 
     val resp = _responder.request(url, parameter.+=("token" -> _responder.token))
 
@@ -140,37 +140,11 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
       val sents = data.getJSONObject("body").getJSONArray("sentences").length()
 
-      url + " : " + (sents > 0)
+      Result.resultFormat(url , (sents > 0).toString, sents.toString)
 
     } else
 
-      url + " : " + false
-  }
-  def get_related_info = {
-
-    val resp = _responder.request(url, parameter)
-
-    url + " : " + new JSONObject(resp).get("status") == "1"
-
-  }
-
-   //
-  def getHotData: String = {
-
-    val resp = _responder.request(url, parameter)
-
-    val status = new JSONObject(resp).get("status").toString
-
-     if(status == "1") {
-
-      val size = new JSONObject(resp).getJSONObject("result").getJSONObject("code_info").getJSONArray("ehf_").length()
-
-       url + " : " + (size > 0)
-
-    } else {
-
-       url + " : " + false
-     }
+      Result.resultFormat(url , "false", "None")
 
   }
 

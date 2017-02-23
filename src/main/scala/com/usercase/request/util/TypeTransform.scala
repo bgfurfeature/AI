@@ -16,6 +16,7 @@ object TypeTransform {
     map
   }
 
+  // JAVA Map -> String
   def jMapToString(cookies: java.util.Map[String, String]) = {
 
     var res = ""

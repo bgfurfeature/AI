@@ -1,6 +1,7 @@
 package com.usercase.request.parser
 
 import com.usercase.request.http.HttpData
+import org.json.JSONObject
 
 import scala.collection.mutable
 
@@ -18,15 +19,18 @@ class RespondParserReflect(className: String) {
     * @param parameter 参数
     * @return
     */
-  def runMethod(methodName: String, url: String, parameter: scala.collection.mutable.HashMap[String,String], httpData: HttpData) = {
+
+  type T = (String, String, mutable.HashMap[String,String], HttpData)
+
+  def runMethod(t: T):JSONObject= {
 
     val constructor = RPClass.getConstructor(classOf[String], classOf[mutable.HashMap[String,String]], classOf[HttpData])
 
-    val RPObject = constructor.newInstance(url, parameter, httpData)
+    val RPObject = constructor.newInstance(t._2, t._3, t._4)
 
-    val result  = RPClass.getMethod(methodName).invoke(RPObject)
+    val result  = RPClass.getMethod(t._1).invoke(RPObject)
 
-    result.toString
+    result.asInstanceOf[JSONObject]
 
   }
 
