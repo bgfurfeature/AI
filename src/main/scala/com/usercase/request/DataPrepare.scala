@@ -67,9 +67,17 @@ object DataPrepare {
 
         }
 
-        FileUtil.normalWriteToFile("F://datatest//telecom//wokong//WR_http",urlsLB.toSeq)
+      case (url_, "getRateLine") =>
 
+        baseDataMap.get("stock").get.split(",").foreach{ x =>
+
+          val finalUrl = url_ + "\t" + s"query_type=stock&query_key=$x&query_date=week" + "\tgetRateLine"
+
+          urlsLB.+=(finalUrl)
+        }
     }
+
+    FileUtil.normalWriteToFile("F://datatest//telecom//wokong//WR_http",urlsLB.toSeq)
 
   }
 
