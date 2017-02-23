@@ -15,21 +15,6 @@ object Start {
 
   private  var httpData:HttpData = null
 
-  // 加载数据文件(生成http请求链接)
-  def loadTestData(hy:String, stock:String, gn: String) =  {
-
-    val stocks = Source.fromFile(stock).getLines().toList
-
-    val hys = Source.fromFile(hy).getLines().toList
-
-    val gns = Source.fromFile(gn).getLines().toList
-
-    stocks.foreach{ x =>
-
-    }
-
-
-  }
 
   // 请求接口
   def httpTest(fileName:String, rclass:RespondParserReflect) = {
@@ -86,14 +71,13 @@ object Start {
 
     Notice.apply(parser)
 
-
     // FX test
 
     // httpTest(httpRequestFilePath, myFlectfx)
 
     // wk test
 
-    httpTest(wkhttpRequestFilePath, myFlectwk)
+     httpTest(wkhttpRequestFilePath, myFlectwk)
 
   }
 
