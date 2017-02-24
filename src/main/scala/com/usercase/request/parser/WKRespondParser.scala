@@ -18,14 +18,13 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
   // 11. ajax_get_hy_and_gn_hot.php
   def getHyAndGn = {
 
-    val res = new Result()
+    val res = new Result
 
-    res.format("url",url).put("interfaceType","ajax_get_hy_and_gn_hot").put("接口:","行业，概念热度")
+    val (resp, url) = _responder.requestWK(url, parameter)
 
-    val resp = _responder.requestWK(url, parameter)
+    res.format("url",url).put("interfaceType","getHyAndGn").put("接口:","行业，热度数据")
 
-    if(resp != "") {
-
+    if(resp != "{}") {
 
       val status = new JSONObject(resp).get("status").toString
 
@@ -63,29 +62,37 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
-    res.format("url",url).put("interfaceType","getCurve").put("接口:","大盘数据")
+    val (resp, url) = _responder.requestWK(url, parameter)
 
-    val resp = _responder.requestWK(url, parameter)
+    res.format("url",url).put("interfaceType","getCurve").put("接口:","大盘数据")
 
     val status = new JSONObject(resp).get("status").toString
 
-    if(status == "1") {
+    if(resp != "{}") {
 
-      if(url.contains("ajax_get_grail")) {
+      if(status == "1") {
 
-        val codeInfo = new JSONObject(resp).getJSONObject("result").getJSONObject("code_info").get("open").toString
+        if(url.contains("ajax_get_grail")) {
 
-        res.resultFormat((codeInfo != "").toString, codeInfo.toString)
+          val codeInfo = new JSONObject(resp).getJSONObject("result").getJSONObject("code_info").get("open").toString
+
+          res.resultFormat((codeInfo != "").toString, codeInfo.toString)
+
+        } else {
+
+          val codeInfo = new JSONObject(resp).getJSONObject("result").getJSONArray("code_info").length()
+
+          res.resultFormat((codeInfo > 0).toString, codeInfo.toString)
+        }
+
 
       } else {
 
-        val codeInfo = new JSONObject(resp).getJSONObject("result").getJSONArray("code_info").length()
+        res.resultFormat( "false", "None")
 
-        res.resultFormat((codeInfo > 0).toString, codeInfo.toString)
       }
 
-
-    } else {
+    }else {
 
       res.resultFormat( "false", "None")
 
@@ -105,9 +112,9 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
-    res.format("url",url).put("interfaceType","ajax_get_real_time_hot").put("接口:","A股市场实时热度数据")
+    val (resp, url) = _responder.requestWK(url, parameter)
 
-    val resp = _responder.requestWK(url, parameter)
+    res.format("url",url).put("interfaceType","ajax_get_real_time_hot").put("接口:","A股市场实时热度数据")
 
     val status = new JSONObject(resp).get("status").toString
 
@@ -130,11 +137,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
+    val (resp, url) = _responder.requestWK(url, parameter)
+
     res.format("url",url).put("interfaceType","ajax_get_news_trend").put("接口:","新闻走势")
 
-    val resp = _responder.requestWK(url, parameter)
-
-    if(resp != "") {
+    if(resp != "{}") {
 
       val status = new JSONObject(resp).get("status").toString
 
@@ -163,12 +170,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
+    val (resp, url) = _responder.requestWK(url, parameter)
+
     res.format("url",url).put("interfaceType","ajax_get_hotrecord").put("接口:","单只股票月热度数据")
 
-
-    val resp = _responder.requestWK(url, parameter)
-
-    if(resp != "") {
+    if(resp != "{}") {
 
       val status = new JSONObject(resp).get("status").toString
 
@@ -198,11 +204,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
+    val (resp, url) = _responder.requestWK(url, parameter)
+
     res.format("url",url).put("interfaceType","ajax_get_relate_shg").put("接口:","关联谱图数据")
 
-    val resp = _responder.requestWK(url, parameter)
-
-    if(resp != "") {
+    if(resp != "{}") {
 
       val status = new JSONObject(resp).get("status").toString
 
@@ -242,12 +248,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
+    val (resp, url) = _responder.requestWK(url, parameter)
+
     res.format("url",url).put("interfaceType","ajax_get_rateline").put("接口:","收益率数据接口")
 
-
-    val resp = _responder.requestWK(url, parameter)
-
-    if(resp != "") {
+    if(resp != "{}") {
 
       val size = new JSONObject(resp).getJSONObject("body").getJSONArray("list").length()
 
@@ -295,11 +300,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
+    val (resp, url) = _responder.requestWK(url, parameter)
+
     res.format("url",url).put("interfaceType","ajax_get_related_info").put("接口:","关联资讯")
 
-    val resp = _responder.requestWK(url, parameter)
-
-    if(resp != "") {
+    if(resp != "{}") {
 
       val jSONObject = new JSONObject(resp)
 
@@ -350,21 +355,24 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
+    val (resp, url) = _responder.requestWK(url, parameter)
+
     res.format("url",url).put("interfaceType","ajax_get_hot_data").put("接口:","热度排行")
 
-    val resp = _responder.requestWK(url, parameter)
+    if(resp != "{}") {
+      val status = new JSONObject(resp).get("status").toString
 
-    val status = new JSONObject(resp).get("status").toString
+      if(status == "1") {
 
-    if(status == "1") {
+        val size = new JSONObject(resp).getJSONObject("result").getJSONObject("code_info").getJSONArray("shf_").length()
 
-      val size = new JSONObject(resp).getJSONObject("result").getJSONObject("code_info").getJSONArray("shf_").length()
+        res.resultFormat((size > 0).toString, size.toString)
 
-      res.resultFormat((size > 0).toString, size.toString)
+      } else {
 
-    } else {
+        res.resultFormat("false", "None")
 
-      res.resultFormat("false", "None")
+      }
 
     }
 

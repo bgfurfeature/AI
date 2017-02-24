@@ -101,8 +101,6 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
 
     val finalUrl = getUrl(strUrl, parameters)
 
-    println(finalUrl)
-
     val respond = Jsoup.connect(finalUrl)
       .timeout(5000)
       .execute()
@@ -112,13 +110,11 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
 
   }
 
-  def requestWK(strUrl:String, parameters:scala.collection.mutable.HashMap[String,String]): String = {
+  def requestWK(strUrl:String, parameters:scala.collection.mutable.HashMap[String,String]): (String,String) = {
 
-    var respond = ""
+    var respond = "{}"
 
     val finalUrl = getUrl(strUrl, parameters)
-
-    println("finalUrl: " + finalUrl)
 
     warnLog(logFileInfo, "finalUrl: "  + finalUrl)
 
@@ -131,7 +127,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
       }
       respond = connect.userAgent(userAgent)
         .method(Method.POST)
-        .cookies(getCookies(getCookie))
+        .cookies(getCookies(login))
         .execute()
         .body()
     } catch {
@@ -139,17 +135,15 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
 
     }
 
-    respond
+    (respond, finalUrl)
 
   }
 
-  def request(strUrl:String, parameters:scala.collection.mutable.HashMap[String,String]): String = {
+  def request(strUrl:String, parameters:scala.collection.mutable.HashMap[String,String]): (String,String) = {
 
     val finalUrl = getUrl(strUrl, parameters)
 
-    var respond = ""
-
-    println("finalUrl: " + finalUrl)
+    var respond = "{}"
 
     warnLog(logFileInfo, "finalUrl: "  + finalUrl)
 
@@ -162,11 +156,11 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
       case e: Exception =>
     }
 
-    respond
+    (respond, finalUrl)
 
   }
 
-  def getCookie = {
+  def login = {
 
     var cookiesG = ""
 
@@ -191,8 +185,6 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
 
     } finally {
 
-      if(cookiesG == "")
-        Notice.getInstance.emailNotice("plateform can't not login !!!!" )
     }
 
 
@@ -225,10 +217,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
     } catch {
       case e: Exception =>
     } finally {
-      // token warning
-      if(token == "")
 
-        Notice.getInstance.emailNotice(" can't not get token!!!! ")
     }
 
     token

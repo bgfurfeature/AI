@@ -1,13 +1,13 @@
 package com.usercase.request
 
+import java.util.{Calendar, Date, Timer}
+
 import com.bgfurfeature.config.Dom4jParser
 import com.bgfurfeature.log.CLogger
 import com.usercase.request.http._
 import com.usercase.request.parser.RespondParserReflect
-import com.usercase.request.util.{RespondTime, TypeTransform}
-import org.json.JSONObject
+import com.usercase.request.timer.MyTimerTask
 
-import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
 /**
@@ -15,35 +15,9 @@ import scala.io.Source
   */
 object Start  extends CLogger {
 
+  // 初始化
+  def init(xmlFile: String) = {
 
-  private  var httpData:HttpData = null
-
-
-  // 请求接口
-  def httpTest(fileName:String, rclass:RespondParserReflect) = {
-
-    val resLb = new ListBuffer[JSONObject]
-
-    Source.fromFile(fileName).getLines().foreach { line =>
-
-      val ls = line.split("\t")
-      val http = ls(0)
-
-      val param = TypeTransform.listToHashMap(ls(1).split("&").toList)
-
-      val method = ls(2)
-
-      // println(ls.foreach(println))
-
-      val parameter = (method, http, param, httpData)
-
-      val result = RespondTime.time(parameter, rclass.runMethod)
-
-      resLb.+=(result)
-
-    }
-
-    resLb
 
   }
 
@@ -52,12 +26,6 @@ object Start  extends CLogger {
     val Array(xmlFile) = args
 
     val parser = Dom4jParser.apply(xmlFilePath = xmlFile)
-
-    val httpRequestFilePath = parser.getParameterByTagName("File.url_fx")
-
-    val httpRequestFilePathTest = parser.getParameterByTagName("File.url_test")
-
-    val wkhttpRequestFilePath = parser.getParameterByTagName("File.url_wk")
 
     val requestHeaderPath = parser.getParameterByTagName("File.header")
 
@@ -76,29 +44,22 @@ object Start  extends CLogger {
 
     val header = Source.fromFile(requestHeaderPath).getLines().toList
 
-    httpData = HttpData.apply("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36","", parser)
 
     JsonTypeNotice.apply(parser)
 
-    // FX test
-    val fx_res = httpTest(httpRequestFilePath, myFlectfx)
 
-    // fx_res.foreach(println)
+    val PERIOD_TIME = 60 * 1000
 
-    // wk test
-    val res = httpTest(wkhttpRequestFilePath, myFlectwk).++=:(fx_res)
+    val task = new MyTimerTask(parser = parser)
 
-    val notice = JsonTypeNotice.getInstance.asInstanceOf[JsonTypeNotice]
-
-    res.foreach { x=>
-
-      notice.notice(x)
-
-    }
-
-    notice.clearSet
-
-
+    task.run()
+    val timer = new Timer()
+    val cal = Calendar.getInstance()
+    cal.setTime(new Date())
+    cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + 1)
+    val startData = cal.getTime
+    timer.schedule(task, startData ,PERIOD_TIME)  // 1 Min 之后开始每一分钟跑一次
 
   }
+
 }

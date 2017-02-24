@@ -1,5 +1,6 @@
 package com.usercase.request.util
 
+import com.bgfurfeature.log.CLogger
 import com.usercase.request.http.HttpData
 import org.json.JSONObject
 
@@ -8,7 +9,7 @@ import scala.collection.mutable
 /**
   * Created by C.J.YOU on 2017/2/23.
   */
-object RespondTime {
+object RespondTime extends  CLogger {
 
   type T = (String, String, mutable.HashMap[String,String], HttpData)
 
@@ -24,6 +25,10 @@ object RespondTime {
     val timeR = (endTime - startTime)
 
     res.put("RT", timeR.toString)
+
+    warnLog(logFileInfo, "result: "  + res.toString())
+
+    res
 
   }
 
