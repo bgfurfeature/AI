@@ -4,6 +4,7 @@ import java.net.SocketTimeoutException
 import java.util
 
 import com.bgfurfeature.config.Dom4jParser
+import com.bgfurfeature.log.CLogger
 import com.usercase.request.util.TypeTransform
 import org.json.JSONObject
 import org.jsoup.Connection.Method
@@ -12,10 +13,11 @@ import org.jsoup.Jsoup
 /**
   * Created by C.J.YOU on 2017/2/21.
   */
-class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) {
+class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLogger{
 
   /**
     * 格式化成http请求的参数
+    *
     * @param parameter 参数HashMap
     * @return 参数
     */
@@ -43,6 +45,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) {
 
   /**
     * 得到最终的url
+    *
     * @param url 一级url域名
     * @param parameters 参数内容map
     * @return url
@@ -89,6 +92,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) {
 
   /**
     * 消息通知
+    *
     * @param strUrl
     * @param parameters
     * @return
@@ -96,6 +100,8 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) {
   def notification(strUrl:String, parameters:scala.collection.mutable.HashMap[String,String]) = {
 
     val finalUrl = getUrl(strUrl, parameters)
+
+    println(finalUrl)
 
     val respond = Jsoup.connect(finalUrl)
       .timeout(5000)
@@ -113,6 +119,8 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) {
     val finalUrl = getUrl(strUrl, parameters)
 
     println("finalUrl: " + finalUrl)
+
+    warnLog(logFileInfo, "finalUrl: "  + finalUrl)
 
     var connect = Jsoup.connect(strUrl).timeout(5000)
 
@@ -140,7 +148,10 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) {
     val finalUrl = getUrl(strUrl, parameters)
 
     var respond = ""
+
     println("finalUrl: " + finalUrl)
+
+    warnLog(logFileInfo, "finalUrl: "  + finalUrl)
 
     try {
        respond = Jsoup.connect(finalUrl)
@@ -181,7 +192,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) {
     } finally {
 
       if(cookiesG == "")
-        Notice.getInstance.emailNotice(" can't not login !!!!" )
+        Notice.getInstance.emailNotice("plateform can't not login !!!!" )
     }
 
 

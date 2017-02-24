@@ -18,9 +18,14 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
   // 11. ajax_get_hy_and_gn_hot.php
   def getHyAndGn = {
 
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","ajax_get_hy_and_gn_hot").put("接口:","行业，概念热度")
+
     val resp = _responder.requestWK(url, parameter)
 
     if(resp != "") {
+
 
       val status = new JSONObject(resp).get("status").toString
 
@@ -28,17 +33,18 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
         val size = new JSONObject(resp).getJSONObject("visit").get("0").toString
 
-        Result.resultFormat(url, (size != "").toString, size.toString)
+        res.resultFormat((size != "").toString, size.toString)
+
 
       } else {
 
-        Result.resultFormat(url , "false", "None")
+        res.resultFormat( "false", "None")
 
       }
 
     } else {
 
-      Result.resultFormat(url , "false", "None")
+      res.resultFormat("false", "None")
 
     }
 
@@ -55,6 +61,10 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
   // 9: ajax_get_curve.php
   def getCurve = {
 
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","getCurve").put("接口:","大盘数据")
+
     val resp = _responder.requestWK(url, parameter)
 
     val status = new JSONObject(resp).get("status").toString
@@ -65,19 +75,19 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
         val codeInfo = new JSONObject(resp).getJSONObject("result").getJSONObject("code_info").get("open").toString
 
-        Result.resultFormat(url, (codeInfo != "").toString, codeInfo.toString)
+        res.resultFormat((codeInfo != "").toString, codeInfo.toString)
 
       } else {
 
         val codeInfo = new JSONObject(resp).getJSONObject("result").getJSONArray("code_info").length()
 
-        Result.resultFormat(url, (codeInfo > 0).toString, codeInfo.toString, interfaceType = "大盘数据接口")
+        res.resultFormat((codeInfo > 0).toString, codeInfo.toString)
       }
 
 
     } else {
 
-      Result.resultFormat(url , "false", "None", interfaceType = "大盘数据接口")
+      res.resultFormat( "false", "None")
 
     }
 
@@ -93,6 +103,10 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
   // 7. ajax_get_real_time_hot
   def getRealTimeHot = {
 
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","ajax_get_real_time_hot").put("接口:","A股市场实时热度数据")
+
     val resp = _responder.requestWK(url, parameter)
 
     val status = new JSONObject(resp).get("status").toString
@@ -101,11 +115,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
       val visit = new JSONObject(resp).getJSONObject("visit").get("0").toString
 
-      Result.resultFormat(url, (visit != "").toString, visit.toString)
+      res.resultFormat((visit != "").toString, visit.toString)
 
     } else {
 
-      Result.resultFormat(url , "false", "None")
+      res.resultFormat( "false", "None")
 
     }
 
@@ -113,6 +127,10 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
   // 6. ajax_get_news_trend.php
   def getNewTrend = {
+
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","ajax_get_news_trend").put("接口:","新闻走势")
 
     val resp = _responder.requestWK(url, parameter)
 
@@ -124,17 +142,17 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
         val size = new JSONObject(resp).getJSONArray("infotrend").length()
 
-        Result.resultFormat(url, (size > 0).toString, size.toString)
+        res.resultFormat((size > 0).toString, size.toString)
 
       } else {
 
-        Result.resultFormat(url , "false", "None")
+        res.resultFormat("false", "None")
 
       }
 
     } else {
 
-      Result.resultFormat(url , "false", "None")
+      res.resultFormat("false", "None")
 
     }
 
@@ -142,6 +160,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
   // 5. ajax_get_hotrecord.php
   def getHotRecord = {
+
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","ajax_get_hotrecord").put("接口:","单只股票月热度数据")
+
 
     val resp = _responder.requestWK(url, parameter)
 
@@ -153,17 +176,17 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
         val size = new JSONObject(resp).getJSONArray("visit").length()
 
-        Result.resultFormat(url, (size > 0).toString, size.toString)
+        res.resultFormat((size > 0).toString, size.toString)
 
       } else {
 
-        Result.resultFormat(url , "false", "None")
+        res.resultFormat("false", "None")
 
       }
 
     } else {
 
-      Result.resultFormat(url , "false", "None")
+      res.resultFormat("false", "None")
 
     }
 
@@ -172,6 +195,10 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
   // 4. ajax_get_relate_shg.php
   // 关联谱图数据
   def getRelaeshg = {
+
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","ajax_get_relate_shg").put("接口:","关联谱图数据")
 
     val resp = _responder.requestWK(url, parameter)
 
@@ -193,17 +220,18 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
         val size = (event > 0 ) || industry > 0 || notion > 0 || stock > 0
 
-        Result.resultFormat(url, size.toString, "event:"+event + ",industry:" + industry +",notion:"+ notion + ",stock:" + stock)
+        res.resultFormat(size.toString,
+          "event:"+event + ",industry:" + industry +",notion:"+ notion + ",stock:" + stock)
 
       } else {
 
-        Result.resultFormat(url , "false", "None", interfaceType = "关联谱图数据接口")
+        res.resultFormat("false", "None")
 
       }
 
     } else {
 
-      Result.resultFormat(url , "false", "None")
+      res.resultFormat("false", "None")
 
     }
   }
@@ -212,17 +240,22 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
   // 收益率数据接口
   def getRateLine = {
 
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","ajax_get_rateline").put("接口:","收益率数据接口")
+
+
     val resp = _responder.requestWK(url, parameter)
 
     if(resp != "") {
 
       val size = new JSONObject(resp).getJSONObject("body").getJSONArray("list").length()
 
-        Result.resultFormat(url, (size > 0).toString, size.toString)
+        res.resultFormat((size > 0).toString, size.toString)
 
     } else {
 
-      Result.resultFormat(url , "false", "None")
+      res.resultFormat("false", "None")
 
     }
 
@@ -260,6 +293,10 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
   )
   def getRelatedInfo = {
 
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","ajax_get_related_info").put("接口:","关联资讯")
+
     val resp = _responder.requestWK(url, parameter)
 
     if(resp != "") {
@@ -291,41 +328,17 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
 
          }
-
-         Result.resultFormat(url , status , golbalString)
-
-         /*val news = jSONObject.getJSONArray("news").length()
-
-         val fast_info = jSONObject.getJSONArray("fast_info").length()
-
-         val me_media = jSONObject.getJSONArray("me_media").length()
-
-         val stock = jSONObject.getJSONArray("stock").length()
-
-         val industry = jSONObject.getJSONArray("industry").length()
-
-         val notion = jSONObject.getJSONArray("notion").length()
-
-         val notice = jSONObject.getJSONArray("notice").length()
-
-         val report = jSONObject.getJSONArray("report").length()
-
-         val size = (news > 0 ) && industry > 0 && notion > 0 && stock > 0 && fast_info >0 && me_media > 0 && notice > 0 && report > 0
-
-         Result.resultFormat(url, size.toString,
-             "news:"+ news + ",industry:" + industry +",notion:"+ notion + ",stock:" + stock +
-             ",me_media:" + me_media +",fast_info:"+ fast_info + ",notice:" + notice + ",report:" +
-               report, interfaceType = "关联资讯数据接口")*/
+          res.resultFormat(status , if(golbalString.nonEmpty) golbalString else "work right")
 
        } else {
 
-         Result.resultFormat(url , "false", "None")
+         res.resultFormat("false", "None")
 
        }
 
     } else {
 
-     Result.resultFormat(url , "false", "None")
+     res.resultFormat("false", "None")
 
     }
 
@@ -335,6 +348,10 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
   // 1. ajax_get_hot_data.php
   def getHotData = {
 
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","ajax_get_hot_data").put("接口:","热度排行")
+
     val resp = _responder.requestWK(url, parameter)
 
     val status = new JSONObject(resp).get("status").toString
@@ -343,11 +360,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
       val size = new JSONObject(resp).getJSONObject("result").getJSONObject("code_info").getJSONArray("shf_").length()
 
-      Result.resultFormat(url, (size > 0).toString, size.toString)
+      res.resultFormat((size > 0).toString, size.toString)
 
     } else {
 
-      Result.resultFormat(url , "false", "None")
+      res.resultFormat("false", "None")
 
     }
 

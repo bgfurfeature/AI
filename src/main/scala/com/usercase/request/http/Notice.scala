@@ -6,10 +6,9 @@ import com.usercase.request.util.TypeTransform
 /**
   * Created by C.J.YOU on 2017/2/22.
   */
-class Notice(parser:Dom4jParser) {
+class Notice(parser:Dom4jParser) extends  NoticeType {
 
   def emailNotice(msg: String) = {
-
 
     val url = parser.getParameterByTagName("EmailMessage.url")
 
@@ -17,7 +16,7 @@ class Notice(parser:Dom4jParser) {
 
     val emailMessage =  if(msg == "") parser.getParameterByTagName("EmailMessage.context") else  msg
 
-    HttpData.getInstance.notification(url, TypeTransform.listToHashMap(s"toUser=$toUser,msg=$emailMessage".split(",").toList))
+    HttpData.getInstance.notification(url, TypeTransform.listToHashMap(s"toUser=$toUser&msg=$emailMessage".split("&").toList))
 
   }
 
@@ -36,6 +35,7 @@ class Notice(parser:Dom4jParser) {
 
 
 }
+
 
 object Notice {
 

@@ -1,17 +1,25 @@
 package com.usercase.request.parser
 
+import org.json
 import org.json.JSONObject
 
 /**
   * Created by C.J.YOU on 2017/2/23.
   */
-object Result {
+class Result {
 
-  def  resultFormat(request:String, status: String, result: String, interfaceType:String = "None"): JSONObject = {
+  private val jSONObject:JSONObject = new json.JSONObject()
 
-    val res = s"""{"url": "${request}","status":"${status}" ,"result": "${result}","interfaceType": "${interfaceType}"}"""
+  def format(key:String, value: String) = {
 
-    new JSONObject(res)
+    jSONObject.put(key,value)
+
+  }
+
+  def  resultFormat(status: String = "false", result: String = "None"): JSONObject = {
+
+    jSONObject.put("status",status).put("result",result)
+
 
   }
 

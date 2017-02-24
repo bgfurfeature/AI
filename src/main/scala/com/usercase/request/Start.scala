@@ -1,16 +1,19 @@
 package com.usercase.request
 
 import com.bgfurfeature.config.Dom4jParser
-import com.usercase.request.http.{HttpData, Notice}
+import com.bgfurfeature.log.CLogger
+import com.usercase.request.http._
 import com.usercase.request.parser.RespondParserReflect
 import com.usercase.request.util.{RespondTime, TypeTransform}
+import org.json.JSONObject
 
+import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
 /**
   * Created by C.J.YOU on 2017/2/21.
   */
-object Start {
+object Start  extends CLogger {
 
 
   private  var httpData:HttpData = null
@@ -19,7 +22,9 @@ object Start {
   // 请求接口
   def httpTest(fileName:String, rclass:RespondParserReflect) = {
 
-    Source.fromFile(fileName).getLines().foreach{ line =>
+    val resLb = new ListBuffer[JSONObject]
+
+    Source.fromFile(fileName).getLines().foreach { line =>
 
       val ls = line.split("\t")
       val http = ls(0)
@@ -34,15 +39,12 @@ object Start {
 
       val result = RespondTime.time(parameter, rclass.runMethod)
 
-
-      println(result)
-
-      /*if(result.get("status").toString != "true")
-        println(result)*/
-
-
+      resLb.+=(result)
 
     }
+
+    resLb
+
   }
 
   def main(args: Array[String]) {
@@ -51,7 +53,9 @@ object Start {
 
     val parser = Dom4jParser.apply(xmlFilePath = xmlFile)
 
-    val httpRequestFilePath = parser.getParameterByTagName("File.url")
+    val httpRequestFilePath = parser.getParameterByTagName("File.url_fx")
+
+    val httpRequestFilePathTest = parser.getParameterByTagName("File.url_test")
 
     val wkhttpRequestFilePath = parser.getParameterByTagName("File.url_wk")
 
@@ -61,24 +65,40 @@ object Start {
 
     val reflectClassName2 = parser.getParameterByTagName("RelectClass.WK")
 
+    val logConfigFile =  parser.getParameterByTagName("Logger.path")
+
     val myFlectfx = new RespondParserReflect(reflectClassName)
 
     val myFlectwk = new RespondParserReflect(reflectClassName2)
 
+
+    logConfigure(logConfigFile)
+
     val header = Source.fromFile(requestHeaderPath).getLines().toList
 
-    httpData = HttpData.apply(header(0), "", parser)
+    httpData = HttpData.apply("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36","", parser)
 
-    Notice.apply(parser)
+    JsonTypeNotice.apply(parser)
 
     // FX test
+    val fx_res = httpTest(httpRequestFilePath, myFlectfx)
 
-    // httpTest(httpRequestFilePath, myFlectfx)
+    // fx_res.foreach(println)
 
     // wk test
+    val res = httpTest(wkhttpRequestFilePath, myFlectwk).++=:(fx_res)
 
-     httpTest(wkhttpRequestFilePath, myFlectwk)
+    val notice = JsonTypeNotice.getInstance.asInstanceOf[JsonTypeNotice]
+
+    res.foreach { x=>
+
+      notice.notice(x)
+
+    }
+
+    notice.clearSet
+
+
 
   }
-
 }

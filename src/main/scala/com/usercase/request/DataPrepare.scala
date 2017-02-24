@@ -3,7 +3,6 @@ package com.usercase.request
 import com.bgfurfeature.util.FileUtil
 import org.json.JSONObject
 
-import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
@@ -11,73 +10,199 @@ import scala.io.Source
   * Created by C.J.YOU on 2017/2/23.
   */
 object DataPrepare {
+  
+  var js: JSONObject = null
 
-  val baseDataMap = new mutable.HashMap[String, String]()
-
+  // wookong data load
   def loadTestData(baseData:String, url:String)= {
 
     Source.fromFile(baseData).getLines().foreach { x =>
 
-      println(x)
-      val js = new JSONObject(x)
-      baseDataMap.+=(("stock", js.get("stock").toString))
-      baseDataMap.+=(("hy", js.get("hy").toString))
-      baseDataMap.+=(("gn", js.get("gn").toString))
-      baseDataMap.+=(("info_type_list_stock", js.get("info_type_list_stock").toString))
-      baseDataMap.+=(("info_type_list_hy", js.get("info_type_list_hy").toString))
-      baseDataMap.+=(("info_type_list_gn", js.get("info_type_list_gn").toString))
+      val jsTemp= new JSONObject(x)
 
-      /*baseDataMap.+=(("stock","600170,601018"))
-      baseDataMap.+=(("hy","有色金属"))
-      baseDataMap.+=(("gn","大盘"))
-      baseDataMap.+=(("info_type_list_stock","1,1,1,1,1,1,1,1"))
-      baseDataMap.+=(("info_type_list_hy","0,1,0,0,0,0,0,0"))
-      baseDataMap.+=(("info_type_list_gn","0,1,0,0,0,0,0,0"))*/
+      js = jsTemp
+
     }
 
     val urlsLB = new ListBuffer[String]
 
-    Source.fromFile(url).getLines().toList.map(_.split("\t")).map(x=> (x(0),x(1))).foreach {
+    val uid = js.get("uid").toString
 
+    Source.fromFile(url).getLines().toList.map(_.split("\t")).map(x=> (x(0),x(1))).foreach {
+      // 股票，行业，和概念的关联资讯 https
       case (url_, "getRelatedInfo") =>
 
-        val info_type_list_stock = baseDataMap.get("info_type_list_stock").get
-        val info_type_list_hy = baseDataMap.get("info_type_list_hy").get
-        val info_type_list_gn = baseDataMap.get("info_type_list_gn").get
+        val info_type_list_stock = js.get("info_type_list_stock").toString
+        val info_type_list_hy = js.get("info_type_list_hy").toString
+        val info_type_list_gn = js.get("info_type_list_gn").toString
 
-        baseDataMap.get("stock").get.split(",").foreach{ x =>
+        js.get("stock").toString.split(",").foreach{ x =>
 
           val finalUrl = url_ + "\t" + s"query_type=1&key=$x&start_id=0&info_type_list=$info_type_list_stock&start_time=0" + "\tgetRelatedInfo"
 
           urlsLB.+=(finalUrl)
         }
 
-        baseDataMap.get("hy").get.split(",").foreach{ x =>
+        js.get("hy").toString.split(",").foreach{ x =>
 
           val finalUrl = url_ + "\t" + s"query_type=2&key=$x&start_id=0&info_type_list=$info_type_list_hy&start_time=0" + "\tgetRelatedInfo"
           urlsLB.+=(finalUrl)
 
         }
 
-        baseDataMap.get("gn").get.split(",").foreach { x =>
+        js.get("gn").toString.split(",").foreach { x =>
 
           val finalUrl = url_ + "\t" + s"query_type=3&key=$x&start_id=0&info_type_list=$info_type_list_gn&start_time=0" + "\tgetRelatedInfo"
 
           urlsLB.+=(finalUrl)
 
         }
-
+        // 股票收益率
       case (url_, "getRateLine") =>
 
-        baseDataMap.get("stock").get.split(",").foreach{ x =>
+        js.get("stock").toString.split(",").foreach{ x =>
 
-          val finalUrl = url_ + "\t" + s"query_type=stock&query_key=$x&query_date=week" + "\tgetRateLine"
+          val finalUrl = url_ + "\t" + s"query_type=stock&query_key=$x&query_date=today" + "\tgetRateLine"
 
           urlsLB.+=(finalUrl)
         }
+
+        // 单只股票月热度数据
+      case (url_, "getHotRecord")=>
+
+        js.get("stock").toString.split(",").foreach{ x =>
+
+          val finalUrl = url_ + "\t" + s"query_type=0&key_name=$x&time_type=month" + "\tgetHotRecord"
+
+          urlsLB.+=(finalUrl)
+        }
+
+        // 单只股票实时数据
+      case (url_, "getSingleRealTime") =>
+
+        js.get("stock").toString.split(",").foreach{ x =>
+
+          val finalUrl = url_ + "\t" + s"stock=$x&minute_data=minute_data&hour_data=index" + "\tgetSingleRealTime"
+
+          urlsLB.+=(finalUrl)
+        }
+
+        // A股市场实时热度
+      case (url_, "getRealTimeHot") =>
+
+          val finalUrl_trend = url_ + "\t" + s"minute_data=minute_data" + "\tgetSingleRealTime"
+          val finalUrl_hot = url_ + "\t" + s"hour_data=index" + "\tgetSingleRealTime"
+
+          urlsLB.+=(finalUrl_trend)
+          urlsLB.+=(finalUrl_hot)
+
+        // 大盘数据
+      case (url_, "getCurve")  =>
+
+      js.get("stock").toString.split(",").foreach{ x =>
+
+        val finalUrl = url_ + "\t" + s"code=$x" + "\tgetCurve"
+
+        urlsLB.+=(finalUrl)
+      }
+
+        // 行业和概念热度
+      case (url_, "getHyAndGn") =>
+
+        js.get("hy").toString.split(",").foreach{ x =>
+
+          val finalUrl_min = url_ + "\t" + s"name=$x&query_type=1&minute_data=minute_data" + "\tgetHyAndGn"
+          // val finalUrl_hour = url_ + "\t" + s"name=$x&query_type=1&minute_data=minute_data" + "\tgetHyAndGn"
+          urlsLB.+=(finalUrl_min)
+        }
+
+        js.get("gn").toString.split(",").foreach{ x =>
+
+          val finalUrl_min = url_ + "\t" + s"name=$x&query_type=2&minute_data=minute_data" + "\tgetHyAndGn"
+          // val finalUrl_hour = url_ + "\t" + s"name=$x&query_type=1&minute_data=minute_data" + "\tgetHyAndGn"
+          urlsLB.+=(finalUrl_min)
+        }
+
+        // 新闻趋势
+      case (url_, "getNewTrend") =>
+        js.get("stock").toString.split(",").foreach{ x =>
+
+          val finalUrl = url_ + "\t" + s"query_type=1&key_name=$x" + "\tgetNewTrend"
+
+          urlsLB.+=(finalUrl)
+        }
+
+        // 关联谱图
+      case (url_, "getRelaeshg") =>
+
+        js.get("stock").toString.split(",").foreach{ x =>
+
+          val finalUrl = url_ + "\t" + s"query_type=1&key_name=$x" + "\tgetRelaeshg"
+
+          urlsLB.+=(finalUrl)
+        }
+
+
+      // 行业，概念热度数据
+
+      case (url_, "getHotData") =>
+
+      js.get("hy").toString.split(",").foreach{ x =>
+
+        val finalUrl_min = url_ + "\t" + s"hottype=hy&hotval=$x" + "\tgetHotData"
+        // val finalUrl_hour = url_ + "\t" + s"name=$x&query_type=1&minute_data=minute_data" + "\tgetHyAndGn"
+        urlsLB.+=(finalUrl_min)
+      }
+
+      js.get("gn").toString.split(",").foreach{ x =>
+
+        val finalUrl_min = url_ + "\t" + s"hottype=gn&hotval=$x" + "\tgetHotData"
+        // val finalUrl_hour = url_ + "\t" + s"name=$x&query_type=1&minute_data=minute_data" + "\tgetHyAndGn"
+        urlsLB.+=(finalUrl_min)
+      }
+
+      case (url_, "allsuggest") =>
+
+        val finalUrl_min = url_ + "\t" + s"uid=$uid&after_sentence=%E6%9F%A5%E7%9C%8B%E7%83%AD%E5%BA%A6%E8%BF%9E%E7%BB%ADx%E5%B0%8F%E6%97%B6%E7%AD%89%E4%BA%8Ex&count=8&flag=6" + "\tallsuggest"
+
+        urlsLB.+=(finalUrl_min)
+
+
+      case (url_, "btsentence") =>
+
+        val finalUrl_min = url_ + "\t" + s"uid=$uid&sonditions=[]&start_time=2016-05-12&end_time=2016-09-12&base_sessionid=-1" + "\tbtsentence"
+
+        urlsLB.+=(finalUrl_min)
+
+
+      case (url_, "hotsuggest") =>
+
+        val finalUrl_min = url_ + "\t" + s"uid=$uid&flag=1&count=8" + "\thotsuggest"
+
+        urlsLB.+=(finalUrl_min)
+
+
+      case (url_, "btyield") =>
+        val finalUrl_min = url_ + "\t" + s"uid=$uid" + "\tbtyield"
+
+        urlsLB.+=(finalUrl_min)
+
+      case (url_, "btresult") =>
+        val finalUrl_min = url_ + "\t" + s"uid=$uid&pos=0&count=10" + "\tbtresult"
+
+        urlsLB.+=(finalUrl_min)
+
+
+      case (url_, "btsearch") =>
+
+        val finalUrl_min = url_ + "\t" + s"uid=$uid&sonditions=%E6%80%BB%E8%82%A1%E6%9C%AC," + "\tbtsearch"
+
+        urlsLB.+=(finalUrl_min)
+
     }
 
-    FileUtil.normalWriteToFile("F://datatest//telecom//wokong//WR_http",urlsLB.toSeq)
+
+    FileUtil.normalWriteToFile(url + "_http",urlsLB.toSeq)
 
   }
 
@@ -85,7 +210,7 @@ object DataPrepare {
 
 
     // generator data
-    loadTestData(baseData = "F://datatest//telecom//wokong//baseData",url = "F://datatest//telecom//wokong//url")
+    loadTestData(baseData = "F://datatest//telecom//wokong//baseData",url = "F:/datatest/telecom/wokong/url_wk")
 
 
 

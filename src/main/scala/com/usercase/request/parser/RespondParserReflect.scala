@@ -30,7 +30,7 @@ class RespondParserReflect(className: String) {
 
     val result  = RPClass.getMethod(t._1).invoke(RPObject)
 
-    result.asInstanceOf[JSONObject]
+    result.asInstanceOf[JSONObject].put("RespondParser",className)
 
   }
 

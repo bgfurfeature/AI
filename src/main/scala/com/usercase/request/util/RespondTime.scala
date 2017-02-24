@@ -10,7 +10,6 @@ import scala.collection.mutable
   */
 object RespondTime {
 
-
   type T = (String, String, mutable.HashMap[String,String], HttpData)
 
   // 返回： url + 异常与否 + 中间结果 + 相应时间
@@ -22,9 +21,9 @@ object RespondTime {
 
     val endTime = System.currentTimeMillis()
 
-    val timeR = (endTime - startTime).toString
+    val timeR = (endTime - startTime)
 
-    res.put("RT", timeR)
+    res.put("RT", timeR.toString)
 
   }
 

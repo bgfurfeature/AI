@@ -14,27 +14,34 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   // 模糊搜索
   def btsearch = {
 
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","btsearch").put("接口:","模糊搜索")
+
     val resp = _responder.request(url, parameter.+=("token" -> _responder.token))
 
     val data = new JSONObject(resp)
-
-
+    
     val status = data.getJSONObject("head").get("status").toString
 
     if( status == "1") {
 
       val body = data.getJSONObject("body").getJSONObject("prompt").getJSONArray("basic").length()
 
-      Result.resultFormat(url , (body > 0).toString, body.toString)
+      res.resultFormat((body > 0).toString, body.toString)
 
     } else
 
-      Result.resultFormat(url , "false", "None")
+      res.resultFormat("false", "None")
 
   }
 
   // 获取回测结果
   def btresult = {
+
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","btresult").put("接口:","获取回测结果")
 
     val forUrl = url
 
@@ -56,11 +63,11 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
         val operate_code = data.getJSONObject("head").get("operate_code")
 
-        Result.resultFormat(url , (operate_code != "" ).toString, operate_code.toString)
+        res.resultFormat( (operate_code != "" ).toString, operate_code.toString)
 
       } else
 
-        Result.resultFormat(url , "false", "None")
+        res.resultFormat( "false", "None")
 
     }
 
@@ -68,6 +75,10 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
   //  获取收益率走势
   def btyield = {
+
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","btyield").put("接口:","获取收益率走势")
 
     val forUrl = url
 
@@ -90,11 +101,11 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
         val operate_code = data.getJSONObject("head").get("operate_code")
 
-        Result.resultFormat(url , (operate_code != "" ).toString, operate_code.toString)
+        res.resultFormat((operate_code != "" ).toString, operate_code.toString)
 
       } else
 
-        Result.resultFormat(url , "false", "None")
+        res.resultFormat("false", "None")
 
     }
 
@@ -102,6 +113,11 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
   // 请求回测结果
   def btsentence = {
+
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","btsentence").put("接口:","请求回测结果")
+
 
     val resp = _responder.request(url, parameter.+=("token" -> _responder.token))
 
@@ -113,11 +129,11 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
       val body = data.getJSONObject("body").get("bt_session")
 
-      Result.resultFormat(url , (body!= "").toString, body.toString)
+      res.resultFormat((body!= "").toString, body.toString)
 
     } else
 
-      Result.resultFormat(url , "false", "None")
+      res.resultFormat("false", "None")
   }
 
 
@@ -130,6 +146,11 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   // 获取更多语句
   def allsuggest  = {
 
+    val res = new Result()
+
+    res.format("url",url).put("interfaceType","allsuggest").put("接口:","获取更多语句")
+
+
     val resp = _responder.request(url, parameter.+=("token" -> _responder.token))
 
     val data = new JSONObject(resp)
@@ -140,11 +161,11 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
       val sents = data.getJSONObject("body").getJSONArray("sentences").length()
 
-      Result.resultFormat(url , (sents > 0).toString, sents.toString)
+      res.resultFormat((sents > 0).toString, sents.toString)
 
     } else
 
-      Result.resultFormat(url , "false", "None")
+      res.resultFormat("false", "None")
 
   }
 
