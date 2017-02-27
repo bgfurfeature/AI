@@ -5,6 +5,7 @@ import com.bgfurfeature.log.CLogger
 import org.json.JSONObject
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 /**
   * Created by C.J.YOU on 2017/2/24.
@@ -17,37 +18,50 @@ class JsonTypeNotice(dom4jParser: Dom4jParser) extends Notice(dom4jParser: Dom4j
 
   def clearSet = set.empty
 
-  def notice(jSONObject: JSONObject) = {
+  def notice(resLB: ListBuffer[JSONObject]) = {
 
-    val interfaceType = jSONObject.get("interfaceType").toString
+    resLB.foreach { jSONObject =>
 
-    if(!set.contains(interfaceType)) {
+      warnLog(logFileInfo, jSONObject.toString)
 
-      if(jSONObject.get("status").toString == "false") {
+      if(jSONObject.has("url") && jSONObject.has("interfaceType") ) {
 
-        errorLog(logFileInfo, jSONObject.toString)
+        val url = jSONObject.get("url").toString
 
-        val rt = jSONObject.get("RT").toString.toLong
+        val interfaceType = jSONObject.get("interfaceType").toString
 
-        if(rt > 3000) {
+        if (jSONObject.get("status").toString == "false") {
 
-          emailNotice(s"""$interfaceType:RTime_is_over:$rt:ms"""")
+          errorLog(logFileInfo, jSONObject.toString)
 
-          set.+=(interfaceType)
+        if (!set.contains(interfaceType)) {
 
-        } else {
+            val rt = jSONObject.get("RT").toString.toLong
 
-          val result = jSONObject.get("result").toString
+            if (rt > 3000) {
 
-          emailNotice(s"$interfaceType:data_return_exception:result=$result")
+              emailNotice(s"""$url:RTime_is_over:$rt:ms"""")
 
-          set.+=(interfaceType)
+              set.+=(interfaceType)
+
+            } else {
+
+              val result = jSONObject.get("result").toString
+
+              emailNotice(s"$url:data_return_exception:result=$result")
+
+              set.+=(interfaceType)
+
+            }
+
+          }
 
         }
-
       }
 
     }
+
+    clearSet
 
   }
 

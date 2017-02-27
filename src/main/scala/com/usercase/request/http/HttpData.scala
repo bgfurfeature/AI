@@ -18,7 +18,12 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
 
   private var tokenG: String = ""
 
+  private var cookiesG = ""
+
+  def getLoginCookie = cookiesG
+
   def getToken = tokenG
+
 
   /**
     * 格式化成http请求的参数
@@ -121,7 +126,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
 
     val finalUrl = getUrl(strUrl, parameters)
 
-    warnLog(logFileInfo, "finalUrl: "  + finalUrl)
+    // warnLog(logFileInfo, "finalUrl: "  + finalUrl)
 
     var connect = Jsoup.connect(strUrl).timeout(5000)
 
@@ -132,7 +137,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
       }
       respond = connect.userAgent(userAgent)
         .method(Method.POST)
-        .cookies(getCookies(login))
+        .cookies(getCookies(getLoginCookie))
         .execute()
         .body()
     } catch {
@@ -150,7 +155,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
 
     var respond = "{}"
 
-    warnLog(logFileInfo, "finalUrl: "  + finalUrl)
+    // warnLog(logFileInfo, "finalUrl: "  + finalUrl)
 
     try {
        respond = Jsoup.connect(finalUrl)
@@ -166,8 +171,6 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
   }
 
   def login = {
-
-    var cookiesG = ""
 
     // login
     val login = "http://stock.iwookong.com/ajax/login/user_login.php"
@@ -190,10 +193,10 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
 
     } finally {
 
+      if(cookiesG == "") {
+        warnLog(logFileInfo, msg = "LoginCookies 获取错误！！")
+      }
     }
-
-
-    cookiesG
 
   }
 

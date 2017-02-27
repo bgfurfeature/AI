@@ -3,8 +3,9 @@ package com.usercase.request.task
 import java.util.concurrent.Callable
 
 import com.usercase.request.http.HttpData
-import com.usercase.request.parser.RespondParserReflect
+import com.usercase.request.parser.{RespondParserReflect, Result}
 import com.usercase.request.util.{RespondTime, TypeTransform}
+import org.json
 import org.json.JSONObject
 
 /**
@@ -14,7 +15,7 @@ class Task (line: String, httpData: HttpData, rclass:RespondParserReflect) exten
 
   override def call(): (JSONObject) = {
 
-    var result: JSONObject = null
+    var result: JSONObject = new json.JSONObject()
 
     try {
       val ls = line.split("\t")
@@ -33,7 +34,7 @@ class Task (line: String, httpData: HttpData, rclass:RespondParserReflect) exten
 
       case e:Exception =>
 
-        result.put("RT","3000")
+        result = new Result().resultFormat().put("RT","3000")
 
     }
 

@@ -23,7 +23,6 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
     val respond = _responder.requestWK(url, parameter)
 
-
     val resp = respond._1
 
     url = respond._2

@@ -19,23 +19,20 @@ import scala.io.Source
   */
 class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
-  val reflectClassName = parser.getParameterByTagName("RelectClass.FX")
 
-  val reflectClassName2 = parser.getParameterByTagName("RelectClass.WK")
+  var plate_form_id = parser.getParameterByTagName("Plateform.name")
 
-  val httpRequestFilePath = parser.getParameterByTagName("File.url_fx")
+  var classDefine = "RelectClass." + plate_form_id
 
-  val wkhttpRequestFilePath = parser.getParameterByTagName("File.url_wk")
+  val reflectClassName = parser.getParameterByTagName(classDefine)
 
-  val data_fx = parser.getParameterByTagName("File.data_pre_fx")
+  val RequestFilePath = parser.getParameterByTagName("Plateform.path") + "_http_" + plate_form_id   // + "_test"
 
-  var data_wk = parser.getParameterByTagName("File.data_pre_wk")
+  val baseFile = parser.getParameterByTagName("Plateform.path") + "_base_" + plate_form_id
 
   var data_base = parser.getParameterByTagName("File.base_data")
 
-  val myFlectfx = new RespondParserReflect(reflectClassName)
-
-  val myFlectwk = new RespondParserReflect(reflectClassName2)
+  val myFlect = new RespondParserReflect(reflectClassName)
 
   val httpData = HttpData.apply("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36","", parser)
 
@@ -73,41 +70,32 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
   override def run(): Unit = {
 
-
     var res = new ListBuffer[JSONObject]
 
-    DataPrepare.loadTestData(baseData = data_base, urls = List(data_wk, data_fx))
+    DataPrepare.loadTestData(baseData = data_base, url = baseFile, RequestFilePath)
 
-    //  初始化token，误多次频繁请求，不然获取不到有效值
+    //
+    httpData.login
+    // 初始化token，误多次频繁请求，不然获取不到有效值
     httpData.token
 
-    // FX test
-    if(httpData.getToken != "") {
 
-      res.++=(httpTest(httpRequestFilePath, myFlectfx))
-
-    } else {
+    if(httpData.getToken == "") {
 
       notice.emailNotice("can't_get_token!!!!")
 
     }
 
-    // fx_res.foreach(println)
-    // wk test
-    /*if(httpData.login != "") {
+    if(httpData.getLoginCookie == ""){
 
-      res.++=(httpTest(wkhttpRequestFilePath, myFlectwk))
-
-    } else {
-      notice.emailNotice("plateform_can_not_login_!!!!")
-    }*/
-    res.foreach {x =>
-
-      notice.notice(x)
+      notice.emailNotice("can't_login_plateform!!!!")
 
     }
 
-    notice.clearSet
+    res.++=(httpTest(RequestFilePath, myFlect))
+
+    notice.notice(res)
+
 
   }
 

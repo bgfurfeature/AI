@@ -8,20 +8,24 @@ import org.json.JSONObject
   */
 class Result {
 
-  private val jSONObject:JSONObject = new json.JSONObject()
+  private var jSONObject:JSONObject = new json.JSONObject()
 
   def result =  jSONObject
 
   def format(key:String, value: String) = {
 
-    jSONObject.put(key,value)
+
+    this.jSONObject = jSONObject.put(key,value)
+
+    this.jSONObject
 
   }
 
   def  resultFormat(status: String = "false", result: String = "None"): JSONObject = {
 
-    jSONObject.put("status",status).put("result",result)
+    this.jSONObject = jSONObject.put("status",status).put("result",result)
 
+    this.jSONObject
 
   }
 

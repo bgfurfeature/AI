@@ -2,7 +2,10 @@ package com.usercase.request
 
 import com.bgfurfeature.log.CLogger
 import com.bgfurfeature.util.FileUtil
+import org.json
 import org.json.JSONObject
+import org.jsoup.Connection.Method
+import org.jsoup.Jsoup
 
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
@@ -15,7 +18,7 @@ object DataPrepare  extends CLogger {
   var js: JSONObject = null
 
   // wookong data load
-  def loadTestData(baseData:String, urls:List[String])= {
+  def loadTestData(baseData:String, url:String, savePath: String)= {
 
     Source.fromFile(baseData).getLines().foreach { x =>
 
@@ -33,9 +36,7 @@ object DataPrepare  extends CLogger {
 
       val uid = js.get("uid").toString
 
-      urls.foreach { url =>
-
-        Source.fromFile(url).getLines().toList.map(_.split("\t")).map(x=> (x(0),x(1))).foreach {
+      Source.fromFile(url).getLines().toList.map(_.split("\t")).map(x=> (x(0),x(1))).foreach {
           // 股票，行业，和概念的关联资讯 https
           case (url_, "getRelatedInfo") =>
 
@@ -206,11 +207,9 @@ object DataPrepare  extends CLogger {
 
             urlsLB.+=(finalUrl_min)
 
-        }
-
-        FileUtil.normalWriteToFile(url + "_http",urlsLB.toSeq)
-
       }
+
+      FileUtil.normalWriteToFile(savePath ,urlsLB.toSeq)
 
     } else {
 
@@ -220,13 +219,81 @@ object DataPrepare  extends CLogger {
 
   }
 
+
+  // pick 50 test stock hy, gn
+
+  def pickData(file:String) =  {
+
+    val stock = Source.fromFile(file).getLines().mkString(",")
+    println(stock)
+
+  }
+
+  // http://fanyi.baidu.com/sug?kw=loud
+  // data.array遍历得到jsonObject（k -> v）
+
+  def sug(words:List[String], size: Int) = {
+
+
+    val word = ""
+
+    val respond = Jsoup.
+      connect("http://fanyi.baidu.com/sug")
+      .data("kw",s"$word")
+      .ignoreContentType(true)
+      .header("Content-Type","application/x-www-form-urlencoded; charset=UTF-8")
+      .method(Method.POST)
+      .execute().body()
+
+    val array = new json.JSONObject(respond).getJSONArray("data")
+
+    val ls = new ListBuffer[String]
+
+    for(index <- 0 until array.length) {
+
+      val jSONObject = new json.JSONObject(array.get(index).toString)
+
+      ls.+=(jSONObject.get("k").toString + " -> " + jSONObject.get("v").toString)
+
+    }
+
+    FileUtil.normalWriteToFile(path = "", ls, isAppend = true)
+
+
+
+  }
+
+
+  // http://fanyi.baidu.com/v2transapi?from=en&to=zh&query=so&simple_means_flag=3
+  // trans_result.data.dst
+  def getMeaning = {
+
+    val respond = Jsoup.
+      connect("http://fanyi.baidu.com/v2transapi")
+      .data("from","en").data("to","zh").data("query","loud").data("simple_means_flag","3")
+      .header("Accept","*/*")
+      .ignoreContentType(true)
+      .header("Content-Type","application/x-www-form-urlencoded; charset=UTF-8")
+      .method(Method.POST)
+      .execute().body()
+
+    val js = new json.JSONObject(new json.JSONObject(respond).getJSONObject("trans_result").getJSONArray("data").get(0).toString)
+
+    println(js.get("src").toString + " -> " + js.get("dst").toString)
+
+  }
   def main(args: Array[String]) {
 
 
     // generator data
-    loadTestData(baseData = "F://datatest//telecom//wokong//baseData",urls = List("F:/datatest/telecom/wokong/url_wk"))
+    // loadTestData(baseData = "F://datatest//telecom//wokong//baseData", url = "F:/datatest/telecom/wokong/url_http", "")
 
+    // 50 stock
+    // pickData("F:\\datatest\\telecom\\wokong\\stock")
 
+    // getMeaning
+
+    sug
 
   }
 

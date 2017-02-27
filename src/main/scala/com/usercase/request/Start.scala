@@ -5,7 +5,6 @@ import java.util.{Calendar, Date, Timer}
 import com.bgfurfeature.config.Dom4jParser
 import com.bgfurfeature.log.CLogger
 import com.usercase.request.http._
-import com.usercase.request.parser.RespondParserReflect
 import com.usercase.request.timer.MyTimerTask
 
 import scala.io.Source
@@ -29,26 +28,17 @@ object Start  extends CLogger {
 
     val requestHeaderPath = parser.getParameterByTagName("File.header")
 
-    val reflectClassName = parser.getParameterByTagName("RelectClass.FX")
-
-    val reflectClassName2 = parser.getParameterByTagName("RelectClass.WK")
-
     val logConfigFile =  parser.getParameterByTagName("Logger.path")
-
-    val myFlectfx = new RespondParserReflect(reflectClassName)
-
-    val myFlectwk = new RespondParserReflect(reflectClassName2)
 
 
     logConfigure(logConfigFile)
 
     val header = Source.fromFile(requestHeaderPath).getLines().toList
 
-
     JsonTypeNotice.apply(parser)
 
 
-    val PERIOD_TIME = 60 * 1000
+    val PERIOD_TIME = 60 * 1000 * 10
 
 
     val task = new MyTimerTask(parser = parser)
@@ -59,7 +49,7 @@ object Start  extends CLogger {
     cal.setTime(new Date())
     cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + 1)
     val startData = cal.getTime
-    timer.schedule(task, startData ,PERIOD_TIME)  // 1 Min 之后开始每一分钟跑一次
+    timer.schedule(task, startData ,PERIOD_TIME)  // 10 Min 之后开始每一分钟跑一次
 
   }
 
