@@ -234,7 +234,6 @@ object DataPrepare  extends CLogger {
 
   def sug(words:List[String], size: Int) = {
 
-
     val word = ""
 
     val respond = Jsoup.
