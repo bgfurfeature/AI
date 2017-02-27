@@ -15,6 +15,11 @@ import org.jsoup.Jsoup
   */
 class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLogger{
 
+
+  private var tokenG: String = ""
+
+  def getToken = tokenG
+
   /**
     * 格式化成http请求的参数
     *
@@ -218,9 +223,13 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
       case e: Exception =>
     } finally {
 
+      if(token == "") {
+        warnLog(logFileInfo, msg = "token 获取错误！！")
+      }
+
     }
 
-    token
+    tokenG = token
 
   }
 

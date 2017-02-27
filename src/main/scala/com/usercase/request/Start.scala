@@ -50,6 +50,7 @@ object Start  extends CLogger {
 
     val PERIOD_TIME = 60 * 1000
 
+
     val task = new MyTimerTask(parser = parser)
 
     task.run()

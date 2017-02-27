@@ -26,7 +26,7 @@ object RespondTime extends  CLogger {
 
     res.put("RT", timeR.toString)
 
-    warnLog(logFileInfo, "result: "  + res.toString())
+    // warnLog(logFileInfo, "结果: "  + res.toString())
 
     res
 

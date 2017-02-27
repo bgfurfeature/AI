@@ -3,7 +3,7 @@ package com.usercase.request.task
 import java.util.concurrent.Callable
 
 import com.usercase.request.http.HttpData
-import com.usercase.request.parser.{RespondParserReflect, Result}
+import com.usercase.request.parser.RespondParserReflect
 import com.usercase.request.util.{RespondTime, TypeTransform}
 import org.json.JSONObject
 
@@ -33,7 +33,7 @@ class Task (line: String, httpData: HttpData, rclass:RespondParserReflect) exten
 
       case e:Exception =>
 
-        new Result().resultFormat().put("RT","3000")
+        result.put("RT","3000")
 
     }
 

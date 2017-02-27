@@ -6,7 +6,8 @@ import org.json.JSONObject
 /**
   * Created by C.J.YOU on 2017/2/21.
   */
-class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[String,String], _responder: HttpData) {
+class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashMap[String,String], _responder: HttpData)
+  extends RespondParser {
 
   // 登陆操作
   def login = {
@@ -20,7 +21,12 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result
 
-    val (resp, url) = _responder.requestWK(url, parameter)
+    val respond = _responder.requestWK(url, parameter)
+
+
+    val resp = respond._1
+
+    url = respond._2
 
     res.format("url",url).put("interfaceType","getHyAndGn").put("接口:","行业，热度数据")
 
@@ -62,7 +68,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
-    val (resp, url) = _responder.requestWK(url, parameter)
+    val respond = _responder.requestWK(url, parameter)
+
+    val resp = respond._1
+
+    url = respond._2
 
     res.format("url",url).put("interfaceType","getCurve").put("接口:","大盘数据")
 
@@ -112,7 +122,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
-    val (resp, url) = _responder.requestWK(url, parameter)
+    val respond = _responder.requestWK(url, parameter)
+
+    val resp = respond._1
+
+    url = respond._2
 
     res.format("url",url).put("interfaceType","ajax_get_real_time_hot").put("接口:","A股市场实时热度数据")
 
@@ -137,7 +151,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
-    val (resp, url) = _responder.requestWK(url, parameter)
+    val respond = _responder.requestWK(url, parameter)
+
+    val resp = respond._1
+
+    url = respond._2
 
     res.format("url",url).put("interfaceType","ajax_get_news_trend").put("接口:","新闻走势")
 
@@ -170,7 +188,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
-    val (resp, url) = _responder.requestWK(url, parameter)
+    val respond = _responder.requestWK(url, parameter)
+
+    val resp = respond._1
+
+    url = respond._2
 
     res.format("url",url).put("interfaceType","ajax_get_hotrecord").put("接口:","单只股票月热度数据")
 
@@ -204,7 +226,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
-    val (resp, url) = _responder.requestWK(url, parameter)
+    val respond = _responder.requestWK(url, parameter)
+
+    val resp = respond._1
+
+    url = respond._2
 
     res.format("url",url).put("interfaceType","ajax_get_relate_shg").put("接口:","关联谱图数据")
 
@@ -248,7 +274,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
-    val (resp, url) = _responder.requestWK(url, parameter)
+    val respond = _responder.requestWK(url, parameter)
+
+    val resp = respond._1
+
+    url = respond._2
 
     res.format("url",url).put("interfaceType","ajax_get_rateline").put("接口:","收益率数据接口")
 
@@ -300,7 +330,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
-    val (resp, url) = _responder.requestWK(url, parameter)
+    val respond = _responder.requestWK(url, parameter)
+
+    val resp = respond._1
+
+    url = respond._2
 
     res.format("url",url).put("interfaceType","ajax_get_related_info").put("接口:","关联资讯")
 
@@ -355,7 +389,11 @@ class WKRespondParser(url: String, parameter: scala.collection.mutable.HashMap[S
 
     val res = new Result()
 
-    val (resp, url) = _responder.requestWK(url, parameter)
+    val respond = _responder.requestWK(url, parameter)
+
+    val resp = respond._1
+
+    url = respond._2
 
     res.format("url",url).put("interfaceType","ajax_get_hot_data").put("接口:","热度排行")
 

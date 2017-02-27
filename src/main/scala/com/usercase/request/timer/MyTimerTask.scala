@@ -78,8 +78,11 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
     DataPrepare.loadTestData(baseData = data_base, urls = List(data_wk, data_fx))
 
+    //  初始化token，误多次频繁请求，不然获取不到有效值
+    httpData.token
+
     // FX test
-    if(httpData.token != "") {
+    if(httpData.getToken != "") {
 
       res.++=(httpTest(httpRequestFilePath, myFlectfx))
 
@@ -91,14 +94,13 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
     // fx_res.foreach(println)
     // wk test
-    if(httpData.login != "") {
+    /*if(httpData.login != "") {
 
       res.++=(httpTest(wkhttpRequestFilePath, myFlectwk))
 
     } else {
       notice.emailNotice("plateform_can_not_login_!!!!")
-    }
-
+    }*/
     res.foreach {x =>
 
       notice.notice(x)
