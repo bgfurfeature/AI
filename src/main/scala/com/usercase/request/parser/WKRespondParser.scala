@@ -16,6 +16,12 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
   }
 
+  // http://stock.iwookong.com/ajax/infocenter/ajax_get_back_test.php?
+  // stocks_info=%2C600000%2C0.34%2C600030%2C0.45&start_time=%2C2017-02-13&end_time=%2C2017-02-28
+  // body.list.length
+
+
+
   // 11. ajax_get_hy_and_gn_hot.php
   def getHyAndGn = {
 
