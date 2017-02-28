@@ -11,6 +11,7 @@ import scala.io.Source
 
 /**
   * Created by C.J.YOU on 2017/2/21.
+  * http 请求响应测试
   */
 object Start  extends CLogger {
 
