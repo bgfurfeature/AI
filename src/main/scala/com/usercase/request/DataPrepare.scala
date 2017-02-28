@@ -256,8 +256,9 @@ object DataPrepare  extends CLogger {
 
     }
 
-    FileUtil.normalWriteToFile(path = "", ls, isAppend = true)
+    ls.+=("\n --------------------------------------------------- \n")
 
+    FileUtil.normalWriteToFile(path = "F:\\datatest\\data\\words", ls, isAppend = true)
 
 
   }

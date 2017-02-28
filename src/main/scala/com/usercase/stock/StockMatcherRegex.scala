@@ -162,7 +162,8 @@ object StockMatcherRegex {
 
           if (matcher.find) {
 
-            result = matcher.group(1)
+            val stock = matcher.group(1)
+            result = url + "\t" + stock + "\t" + String.valueOf(i)
             break.break()
 
           }
