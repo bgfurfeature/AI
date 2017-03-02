@@ -86,7 +86,7 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
           res.++=(httpTest(RequestFilePath, myFlect))
 
-          notice.notice(res)
+          // notice.notice(res)
 
         }
       case "FX" =>
@@ -102,10 +102,14 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
           res.++=(httpTest(RequestFilePath, myFlect))
 
-          notice.notice(res)
+          // notice.notice(res)
 
         }
 
+    }
+
+    res.foreach{ x =>
+      if(x.get("status").toString == "false") println(x)
     }
 
 

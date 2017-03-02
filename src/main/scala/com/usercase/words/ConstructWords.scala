@@ -11,6 +11,7 @@ import org.json
 import org.jsoup.Connection.Method
 import org.jsoup.Jsoup
 
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
@@ -30,11 +31,12 @@ class Task(word:String, size: Int) extends Callable[ListBuffer[String]] {
       .method(Method.POST)
       .execute().body()
 
-    val array = new json.JSONObject(respond).getJSONArray("data")
-
     val ls = new ListBuffer[String]
 
     try {
+
+    val array = new json.JSONObject(respond).getJSONArray("data")
+
       for (index <- 0 until array.length) {
 
         val jSONObject = new json.JSONObject(array.get(index).toString)
@@ -43,7 +45,6 @@ class Task(word:String, size: Int) extends Callable[ListBuffer[String]] {
         val v = jSONObject.get("v").toString
         if (k.length == size) {
           ls.+=(k + " -> " + v)
-          println((k + " -> " + v))
         }
 
       }
@@ -51,7 +52,7 @@ class Task(word:String, size: Int) extends Callable[ListBuffer[String]] {
       case e:Exception =>
     }
 
-    ls.+=("\n --------------------------------------------------- \n")
+    ls.+=("---------------------------------------------------")
 
     ls
 
@@ -96,6 +97,15 @@ object ConstructWords {
 
   }
 
+  def generateWords(file: String, list: List[String], k: Int) = {
+
+    val words = getAllWords(list, k)
+
+    FileUtil.normalWriteToFile(path = file , words.toArray.toSeq.asInstanceOf[Seq[String]], isAppend = false)
+
+
+  }
+
   // http://fanyi.baidu.com/sug?kw=loud
   // data.array遍历得到jsonObject（k -> v）
   def sug(file:String, size: Int, start: String) = {
@@ -112,7 +122,7 @@ object ConstructWords {
 
     println("length:" + length)
 
-    val res = new ListBuffer[String]
+    val res = new mutable.HashSet[String]
 
     for(index <- 0 until length) {
 
@@ -120,24 +130,51 @@ object ConstructWords {
 
       val task = new Task(word = word, size)
 
-      ThreadPool.WORDS_COMPLETION_SERVICE.submit(task)
+      val f = ThreadPool.WORDS_COMPLETION_SERVICE.submit(task).get()
+
+      if(f.size > 1) {
+
+        println("stop for a while......")
+
+        Thread.sleep(1000)
+
+        println("wake up ........")
+
+        val value = f
+
+        res.++=(value)
+
+        res.foreach(println)
+
+
+      }
 
 
     }
 
-    for(index <- 0 until length) {
+    // 从任务队列中提取已完成的，高并发
+    /*for(index <- 0 until length) {
 
       // println("threadNUMBER:" + index)
 
       val f = ThreadPool.WORDS_COMPLETION_SERVICE.take().get()
 
-      val value = f
+       if(f.size > 1) {
 
-      res.++=(value)
+        f.distinct.foreach(println)
 
-    }
+        println("stop for a while......")
+        Thread.sleep(100)
+        println("wake up ........")
 
-    FileUtil.normalWriteToFile(path = "F:\\datatest\\data\\words", res, isAppend = false)
+        val value = f
+
+        res.++=(value)
+      }
+
+    }*/
+
+    FileUtil.normalWriteToFile(path = "F:\\datatest\\data\\words", res.toList, isAppend = false)
 
   }
 
@@ -171,20 +208,17 @@ object ConstructWords {
 
     val file = "F:\\datatest\\data\\words_list"
 
-
-    val string = ""
-    val list1 = new ListBuffer[Char]
+    val string = "dsonujpvqxou"
+    val list = new ListBuffer[String]
     string.foreach{ x =>
-      list1.+=(x)
+      list.+=(x.toString)
     }
+
+    val size = 5
+
     // getAllWords
-    val list = List("g","g","k","n","n","o","o","a","y","s","i","s")
-    val size = 4
-
-    // val words = getAllWords(list, k = size)
-
-    // FileUtil.normalWriteToFile(path = file , words.toArray.toSeq.asInstanceOf[Seq[String]], isAppend = false)
-
+    // generateWords(file, list.toList, size)
+    // 获取单词意思
     sug(file, size, "")
 
 
