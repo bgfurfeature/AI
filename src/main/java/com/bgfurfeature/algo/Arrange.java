@@ -33,7 +33,7 @@ public class Arrange<E> {
             copyTarget.add(copyData.get(i));
             copyData.remove(i);
 
-            arrangeSelect(copyData, copyTarget,k);
+            arrangeSelect(copyData, copyTarget, k );
         }
     }
 

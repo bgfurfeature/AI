@@ -19,7 +19,34 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   // http://stock.iwookong.com/ajax/infocenter/ajax_get_back_test.php?
   // stocks_info=%2C600000%2C0.34%2C600030%2C0.45&start_time=%2C2017-02-13&end_time=%2C2017-02-28
   // body.list.length
+  // body.count > 0
 
+  def getBackTest = {
+
+    val res = new Result
+
+    val respond = _responder.requestWK(url, parameter)
+
+    val resp = respond._1
+
+    url = respond._2
+
+    res.format("url",url).put("interfaceType","getBackTest").put("接口:","回测接口")
+
+    if(resp != "{}") {
+
+        val size = new JSONObject(resp).getJSONObject("body").get("count").toString
+
+        res.resultFormat((size != "0").toString, size.toString)
+
+    } else {
+
+      res.resultFormat("false", "None")
+
+    }
+
+
+  }
 
 
   // 11. ajax_get_hy_and_gn_hot.php

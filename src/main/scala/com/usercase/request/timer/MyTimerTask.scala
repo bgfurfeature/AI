@@ -72,9 +72,11 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
     var res = new ListBuffer[JSONObject]
 
+
+    // dataUpdate == true 重新获取url列表
     DataPrepare.loadTestData(baseData = data_base, url = baseFile, RequestFilePath)
 
-    //
+    // 登陆
     httpData.login
     // 初始化token，误多次频繁请求，不然获取不到有效值
     httpData.token

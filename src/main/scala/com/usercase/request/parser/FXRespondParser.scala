@@ -72,23 +72,6 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
       combineAllMethod(respond._1, res, Array("head", "status", "head","operate_code", "str"))
 
-     /* if (resp != "{}") {
-
-        val status = data.getJSONObject("head").get("status").toString
-
-        if(status == "1") {
-
-          val operate_code = data.getJSONObject("head").get("operate_code")
-
-          res.resultFormat( (operate_code != "" ).toString, operate_code.toString)
-
-        } else
-
-          res.resultFormat( "false", "None")
-
-      } else
-
-        res.resultFormat( "false", "None")*/
     }
 
   }
@@ -119,24 +102,6 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
       combineAllMethod(respond._1, res, Array("head", "status", "head","operate_code", "str"))
 
-      /*if (resp != "{}") {
-        val data = new JSONObject(resp)
-
-        val status = data.getJSONObject("head").get("status").toString
-
-        if( status == "1") {
-
-          val operate_code = data.getJSONObject("head").get("operate_code")
-
-          res.resultFormat((operate_code != "" ).toString, operate_code.toString)
-
-        } else
-
-          res.resultFormat("false", "None")
-      } else
-
-        res.resultFormat("false", "None")*/
-
     }
 
   }
@@ -156,24 +121,6 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
     res.result
 
-    /*if (resp != "{}") {
-
-      val data = new JSONObject(resp)
-
-      val status = data.getJSONObject("head").get("status").toString
-
-      if (status == "1") {
-
-        val body = data.getJSONObject("body").get("bt_session")
-
-        res.resultFormat((body != "").toString, body.toString)
-
-      } else
-
-        res.resultFormat("false", "None")
-    } else
-
-      res.resultFormat("false", "None")*/
   }
 
 
@@ -196,24 +143,6 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
     combineAllMethod(respond._1, res, Array("head", "status", "body", "sentences", "length"))
 
-    /*if (resp != "{}") {
-      val data = new JSONObject(resp)
-
-      val status = data.getJSONObject("head").get("status").toString
-
-      if( status == "1") {
-
-        val sents = data.getJSONObject("body").getJSONArray("sentences").length()
-
-        res.resultFormat((sents > 0).toString, sents.toString)
-
-      } else
-
-        res.resultFormat("false", "None")
-
-    } else {
-      res.resultFormat("false", "None")
-    }*/
 
   }
 
