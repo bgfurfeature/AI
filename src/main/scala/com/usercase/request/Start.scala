@@ -4,6 +4,7 @@ import java.util.{Calendar, Date, Timer}
 
 import com.bgfurfeature.config.Dom4jParser
 import com.bgfurfeature.log.CLogger
+import com.usercase.request.http.{HttpData, JsonTypeNotice}
 import com.usercase.request.timer.MyTimerTask
 
 import scala.io.Source
@@ -23,6 +24,9 @@ object Start  extends CLogger {
 
     val logConfigFile =  parser.getParameterByTagName("Logger.path")
 
+    HttpData.apply("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36","", parser)
+
+    JsonTypeNotice.apply(parser)
 
     logConfigure(logConfigFile)
 

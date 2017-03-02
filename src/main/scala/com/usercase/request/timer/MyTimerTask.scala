@@ -19,7 +19,6 @@ import scala.io.Source
   */
 class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
-
   var plate_form_id = parser.getParameterByTagName("Plateform.name")
 
   var classDefine = "RelectClass." + plate_form_id
@@ -34,9 +33,8 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
   val myFlect = new RespondParserReflect(reflectClassName)
 
-  val httpData = HttpData.apply("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36","", parser)
+  val httpData = HttpData.getInstance
 
-  JsonTypeNotice.apply(parser)
   val notice = JsonTypeNotice.getInstance.asInstanceOf[JsonTypeNotice]
 
   // 请求接口
