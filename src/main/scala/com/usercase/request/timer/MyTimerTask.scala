@@ -36,6 +36,8 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
   val httpData = HttpData.apply("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36","", parser)
 
+  JsonTypeNotice.apply(parser)
+  val notice = JsonTypeNotice.getInstance.asInstanceOf[JsonTypeNotice]
 
   // 请求接口
   def httpTest(fileName:String, rclass:RespondParserReflect) = {
@@ -66,37 +68,47 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
   }
 
-  val notice = JsonTypeNotice.getInstance.asInstanceOf[JsonTypeNotice]
-
   override def run(): Unit = {
 
     var res = new ListBuffer[JSONObject]
 
-
     // dataUpdate == true 重新获取url列表
     DataPrepare.loadTestData(baseData = data_base, url = baseFile, RequestFilePath)
 
-    // 登陆
-    httpData.login
-    // 初始化token，误多次频繁请求，不然获取不到有效值
-    httpData.token
+    plate_form_id match {
 
+      case "WK" =>
+        // 登陆
+        httpData.login
+        if(httpData.getLoginCookie == ""){
 
-    if(httpData.getToken == "") {
+          notice.emailNotice("can't_login_plateform!!!!")
 
-      notice.emailNotice("can't_get_token!!!!")
+        } else  {
+
+          res.++=(httpTest(RequestFilePath, myFlect))
+
+          notice.notice(res)
+
+        }
+      case "FX" =>
+
+        // 初始化token，误多次频繁请求，不然获取不到有效值
+        httpData.token
+
+        if(httpData.getToken == "") {
+
+          notice.emailNotice("can't_get_token!!!!")
+
+        } else  {
+
+          res.++=(httpTest(RequestFilePath, myFlect))
+
+          notice.notice(res)
+
+        }
 
     }
-
-    if(httpData.getLoginCookie == ""){
-
-      notice.emailNotice("can't_login_plateform!!!!")
-
-    }
-
-    res.++=(httpTest(RequestFilePath, myFlect))
-
-    notice.notice(res)
 
 
   }

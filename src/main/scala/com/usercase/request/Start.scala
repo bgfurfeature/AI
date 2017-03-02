@@ -4,7 +4,6 @@ import java.util.{Calendar, Date, Timer}
 
 import com.bgfurfeature.config.Dom4jParser
 import com.bgfurfeature.log.CLogger
-import com.usercase.request.http._
 import com.usercase.request.timer.MyTimerTask
 
 import scala.io.Source
@@ -18,13 +17,6 @@ object Start  extends CLogger {
   // 初始化
   def init(xmlFile: String) = {
 
-
-  }
-
-  def main(args: Array[String]) {
-
-    val Array(xmlFile) = args
-
     val parser = Dom4jParser.apply(xmlFilePath = xmlFile)
 
     val requestHeaderPath = parser.getParameterByTagName("File.header")
@@ -36,13 +28,17 @@ object Start  extends CLogger {
 
     val header = Source.fromFile(requestHeaderPath).getLines().toList
 
-    JsonTypeNotice.apply(parser)
+    parser
 
+  }
+
+  def main(args: Array[String]) {
+
+    val Array(xmlFile) = args
 
     val PERIOD_TIME = 60 * 1000 * 10
 
-
-    val task = new MyTimerTask(parser = parser)
+    val task = new MyTimerTask(parser = init(xmlFile))
 
     task.run()
     val timer = new Timer()
