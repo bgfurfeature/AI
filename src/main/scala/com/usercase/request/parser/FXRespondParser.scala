@@ -6,7 +6,13 @@ import org.json.JSONObject
 /**
   * Created by C.J.YOU on 2017/2/21.
   */
-class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashMap[String,String], _responder: HttpData) extends RespondParser {
+class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashMap[String,String], _responder: HttpData)
+  extends RespondParser {
+
+
+
+  // 多个接口间结果的使用
+  var sessionid = ""
 
 
   // 定义同http请求返回数据的解析函数(返回： url + 异常与否 + 中间结果)
@@ -55,9 +61,9 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
     val forUrl = url
 
-    url = "http://61.147.114.67/cgi-bin/backtest/kensho/1/btsentence.fcgi?start_time=2016-05-12&end_time=2016-09-12&sonditions=[]&base_sessionid=-1"
+    // url = "http://61.147.114.67/cgi-bin/backtest/kensho/1/btsentence.fcgi?start_time=2016-05-12&end_time=2016-09-12&sonditions=[]&base_sessionid=-1"
 
-    val sessionid = btsentence.get("result").toString
+    // val sessionid = btsentence.get("result").toString
 
     if(sessionid != "") {
 
@@ -85,9 +91,9 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
     val forUrl = url
 
-     url = "http://61.147.114.67/cgi-bin/backtest/kensho/1/btsentence.fcgi?start_time=2016-05-12&end_time=2016-09-12&sonditions=[]&base_sessionid=-1"
+     // url = "http://61.147.114.67/cgi-bin/backtest/kensho/1/btsentence.fcgi?start_time=2016-05-12&end_time=2016-09-12&sonditions=[]&base_sessionid=-1"
 
-    val sessionid = btsentence.get("result").toString
+    // val sessionid = btsentence.get("result").toString
 
     if(sessionid != "") {
 

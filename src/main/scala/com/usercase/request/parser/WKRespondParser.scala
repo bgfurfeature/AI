@@ -7,7 +7,7 @@ import org.json.JSONObject
   * Created by C.J.YOU on 2017/2/21.
   */
 class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashMap[String,String], _responder: HttpData)
-  extends RespondParser {
+  extends RespondParser  {
 
   // 登陆操作
   def login = {
@@ -443,6 +443,10 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
         res.resultFormat("false", "None")
 
       }
+
+    } else {
+
+      res.resultFormat("false", "None")
 
     }
 

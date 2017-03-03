@@ -1,11 +1,25 @@
 package com.usercase.request.parser
 
+import com.usercase.request.http.HttpData
 import org.json.JSONObject
 
 /**
   * Created by C.J.YOU on 2017/2/27.
   */
 class RespondParser {
+
+  // init
+  def init(url: String, parameter: scala.collection.mutable.HashMap[String,String], _responder: HttpData) = {
+
+    val res = new Result
+
+    val respond = _responder.requestWK(url, parameter)
+
+    val resp = respond._1
+
+    (res, resp, respond._2)
+
+  }
 
   // 将其中重复代码提取出来
   def combineAllMethod(resp: String, res: Result, args:Array[String]) = {

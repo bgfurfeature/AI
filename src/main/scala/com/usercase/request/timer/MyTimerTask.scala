@@ -106,6 +106,9 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
         }
 
+      case "Stread" =>
+
+
     }
 
     res.foreach{ x =>
