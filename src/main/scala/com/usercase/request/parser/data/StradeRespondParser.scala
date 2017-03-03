@@ -1,6 +1,7 @@
-package com.usercase.request.parser
+package com.usercase.request.parser.data
 
 import com.usercase.request.http.HttpData
+import com.usercase.request.parser.RespondParser
 import org.json.JSONObject
 
 /**

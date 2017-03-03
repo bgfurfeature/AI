@@ -208,16 +208,16 @@ object ConstructWords {
 
     val file = "F:\\datatest\\data\\words_list"
 
-    val string = "dsonujpvqxou"
+    val string = "csdplxdomgjy"
     val list = new ListBuffer[String]
     string.foreach{ x =>
       list.+=(x.toString)
     }
 
-    val size = 5
+    val size = 4
 
     // getAllWords
-    // generateWords(file, list.toList, size)
+    generateWords(file, list.toList, size)
     // 获取单词意思
     sug(file, size, "")
 
