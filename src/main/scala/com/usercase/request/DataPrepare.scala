@@ -6,6 +6,7 @@ import org.json.JSONObject
 
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
+import scala.util.Random
 
 /**
   * Created by C.J.YOU on 2017/2/23.
@@ -33,6 +34,18 @@ object DataPrepare  extends CLogger {
 
       val uid = js.get("uid").toString
 
+      val stocks = js.get("stock").toString.split(",")
+      val hys = js.get("hy").toString.split(",")
+      val gns = js.get("gn").toString.split(",")
+
+      val hyOne = hys.apply(Random.nextInt(hys.length))
+
+      val gnOne = gns.apply(Random.nextInt(gns.length))
+
+      val stockOne = stocks.apply(Random.nextInt(stocks.length))
+
+      val stockTwo = stocks.apply(Random.nextInt(stocks.length))
+
       Source.fromFile(url).getLines().toList.map(_.split("\t")).map(x=> (x(0),x(1))).foreach {
           // 股票，行业，和概念的关联资讯 https
           case (url_, "getRelatedInfo") =>
@@ -41,21 +54,21 @@ object DataPrepare  extends CLogger {
             val info_type_list_hy = js.get("info_type_list_hy").toString
             val info_type_list_gn = js.get("info_type_list_gn").toString
 
-            js.get("stock").toString.split(",").foreach{ x =>
+            stocks.foreach{ x =>
 
               val finalUrl = url_ + "\t" + s"query_type=1&key=$x&start_id=0&info_type_list=$info_type_list_stock&start_time=0" + "\tgetRelatedInfo"
 
               urlsLB.+=(finalUrl)
             }
 
-            js.get("hy").toString.split(",").foreach{ x =>
+            hys.foreach{ x =>
 
               val finalUrl = url_ + "\t" + s"query_type=2&key=$x&start_id=0&info_type_list=$info_type_list_hy&start_time=0" + "\tgetRelatedInfo"
               urlsLB.+=(finalUrl)
 
             }
 
-            js.get("gn").toString.split(",").foreach { x =>
+            gns.foreach { x =>
 
               val finalUrl = url_ + "\t" + s"query_type=3&key=$x&start_id=0&info_type_list=$info_type_list_gn&start_time=0" + "\tgetRelatedInfo"
 
@@ -65,7 +78,7 @@ object DataPrepare  extends CLogger {
           // 股票收益率
           case (url_, "getRateLine") =>
 
-            js.get("stock").toString.split(",").foreach{ x =>
+            stocks.foreach{ x =>
 
               val finalUrl = url_ + "\t" + s"query_type=stock&query_key=$x&query_date=today" + "\tgetRateLine"
 
@@ -75,7 +88,7 @@ object DataPrepare  extends CLogger {
           // 单只股票月热度数据
           case (url_, "getHotRecord")=>
 
-            js.get("stock").toString.split(",").foreach{ x =>
+            stocks.foreach{ x =>
 
               val finalUrl = url_ + "\t" + s"query_type=0&key_name=$x&time_type=month" + "\tgetHotRecord"
 
@@ -85,7 +98,7 @@ object DataPrepare  extends CLogger {
           // 单只股票实时数据
           case (url_, "getSingleRealTime") =>
 
-            js.get("stock").toString.split(",").foreach{ x =>
+            stocks.foreach{ x =>
 
               val finalUrl = url_ + "\t" + s"stock=$x&minute_data=minute_data&hour_data=index" + "\tgetSingleRealTime"
 
@@ -104,7 +117,7 @@ object DataPrepare  extends CLogger {
           // 大盘数据
           case (url_, "getCurve")  =>
 
-            js.get("stock").toString.split(",").foreach{ x =>
+            stocks.foreach{ x =>
 
               val finalUrl = url_ + "\t" + s"code=$x" + "\tgetCurve"
 
@@ -114,14 +127,14 @@ object DataPrepare  extends CLogger {
           // 行业和概念热度
           case (url_, "getHyAndGn") =>
 
-            js.get("hy").toString.split(",").foreach{ x =>
+            hys.foreach{ x =>
 
               val finalUrl_min = url_ + "\t" + s"name=$x&query_type=1&minute_data=minute_data" + "\tgetHyAndGn"
               // val finalUrl_hour = url_ + "\t" + s"name=$x&query_type=1&minute_data=minute_data" + "\tgetHyAndGn"
               urlsLB.+=(finalUrl_min)
             }
 
-            js.get("gn").toString.split(",").foreach{ x =>
+            gns.foreach{ x =>
 
               val finalUrl_min = url_ + "\t" + s"name=$x&query_type=2&minute_data=minute_data" + "\tgetHyAndGn"
               // val finalUrl_hour = url_ + "\t" + s"name=$x&query_type=1&minute_data=minute_data" + "\tgetHyAndGn"
@@ -130,7 +143,8 @@ object DataPrepare  extends CLogger {
 
           // 新闻趋势
           case (url_, "getNewTrend") =>
-            js.get("stock").toString.split(",").foreach{ x =>
+
+            stocks.foreach{ x =>
 
               val finalUrl = url_ + "\t" + s"query_type=1&key_name=$x" + "\tgetNewTrend"
 
@@ -140,7 +154,7 @@ object DataPrepare  extends CLogger {
           // 关联谱图
           case (url_, "getRelaeshg") =>
 
-            js.get("stock").toString.split(",").foreach{ x =>
+            stocks.foreach{ x =>
 
               val finalUrl = url_ + "\t" + s"query_type=1&key_name=$x" + "\tgetRelaeshg"
 
@@ -149,22 +163,27 @@ object DataPrepare  extends CLogger {
 
 
           // 行业，概念热度数据
-
           case (url_, "getHotData") =>
 
-            js.get("hy").toString.split(",").foreach{ x =>
+            hys.foreach{ x =>
 
               val finalUrl_min = url_ + "\t" + s"hottype=hy&hotval=$x" + "\tgetHotData"
               // val finalUrl_hour = url_ + "\t" + s"name=$x&query_type=1&minute_data=minute_data" + "\tgetHyAndGn"
               urlsLB.+=(finalUrl_min)
             }
 
-            js.get("gn").toString.split(",").foreach{ x =>
+            gns.foreach{ x =>
 
               val finalUrl_min = url_ + "\t" + s"hottype=gn&hotval=$x" + "\tgetHotData"
               // val finalUrl_hour = url_ + "\t" + s"name=$x&query_type=1&minute_data=minute_data" + "\tgetHyAndGn"
               urlsLB.+=(finalUrl_min)
             }
+
+          case (url_, "getBackTest") =>
+
+            val finalUrl_min = url_ + "\t" + s"stocks_info=,$stockOne,0.5,$stockTwo,0.50&start_time=,2017-02-13&end_time=,2017-03-06" + "\tgetBackTest"
+
+            urlsLB.+=(finalUrl_min)
 
           case (url_, "allsuggest") =>
 

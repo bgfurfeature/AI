@@ -34,7 +34,7 @@ class Task (line: String, httpData: HttpData, rclass:RespondParserReflect) exten
 
       case e:Exception =>
 
-        result = new Result().resultFormat().put("RT","3000")
+        result = new Result().resultFormat().put("RT","3000").put("error","Exception")
 
     }
 

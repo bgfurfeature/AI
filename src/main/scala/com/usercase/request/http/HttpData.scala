@@ -128,7 +128,8 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
 
     // warnLog(logFileInfo, "finalUrl: "  + finalUrl)
 
-    var connect = Jsoup.connect(strUrl).timeout(5000)
+    var connect = Jsoup.connect(strUrl)
+      .timeout(5000)
 
     try {
 

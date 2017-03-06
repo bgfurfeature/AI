@@ -25,7 +25,7 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
 
   val reflectClassName = parser.getParameterByTagName(classDefine)
 
-  val RequestFilePath = parser.getParameterByTagName("Plateform.path") + "_http_" + plate_form_id   // + "_test"
+  val RequestFilePath = parser.getParameterByTagName("Plateform.path") + "_http_" + plate_form_id  + "_test"
 
   val baseFile = parser.getParameterByTagName("Plateform.path") + "_base_" + plate_form_id
 

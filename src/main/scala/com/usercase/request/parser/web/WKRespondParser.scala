@@ -4,6 +4,8 @@ import com.usercase.request.http.HttpData
 import com.usercase.request.parser.{RespondParser, Result}
 import org.json.JSONObject
 
+import scala.collection.mutable.ListBuffer
+
 /**
   * Created by C.J.YOU on 2017/2/21.
   */
@@ -17,7 +19,7 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
   }
 
-  // http://stock.iwookong.com/ajax/infocenter/ajax_get_back_test.php?
+  // 12.http://stock.iwookong.com/ajax/infocenter/ajax_get_back_test.php?
   // stocks_info=%2C600000%2C0.34%2C600030%2C0.45&start_time=%2C2017-02-13&end_time=%2C2017-02-28
   // body.list.length
   // body.count > 0
@@ -418,6 +420,9 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   }
 
   // 1. ajax_get_hot_data.php
+  // ajax_get_hot_data.php	1=1	getHotData
+  // ajax_get_hot_data.php	hottype=hy&hotval=有色金属	getHotData
+  // ajax_get_hot_data.php	hottype=gn&hotval=大盘	getHotData
   def getHotData = {
 
     val res = new Result()
@@ -428,16 +433,37 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
     url = respond._2
 
-    res.format("url",url).put("interfaceType","ajax_get_hot_data").put("接口:","热度排行")
+    res.format("url",url).put("interfaceType","ajax_get_hot_data").put("接口:","所有热度排行")
+
+    val items = Array("ehf_","ehs_","ehv_","euf_","eus_","euv_","ghf_","ghs_","ghv_","guf_","gus_","guv_","hhf_","hhs_","hhv_","huf_","hus_","huv_","shf_","shv_","shs_","suf_","sus_","suv_")
 
     if(resp != "{}") {
+
       val status = new JSONObject(resp).get("status").toString
 
       if(status == "1") {
 
-        val size = new JSONObject(resp).getJSONObject("result").getJSONObject("code_info").getJSONArray("shf_").length()
+        var flag = "true"
 
-        res.resultFormat((size > 0).toString, size.toString)
+        var lb = new ListBuffer[String]
+
+        val codeInfo = new JSONObject(resp).getJSONObject("result").getJSONObject("code_info")
+
+        items.foreach { item =>
+
+          if(codeInfo.has(item)) {
+
+            val size = codeInfo.getJSONArray(item).length()
+
+            if(size < 0)
+              flag = "false"
+
+            lb.+=(s"$item:$size")
+
+          }
+        }
+
+        res.resultFormat(flag, lb.mkString(","))
 
       } else {
 
