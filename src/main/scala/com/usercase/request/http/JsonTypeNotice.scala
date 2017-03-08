@@ -36,7 +36,7 @@ class JsonTypeNotice(dom4jParser: Dom4jParser) extends Notice(dom4jParser: Dom4j
 
             if (rt > 3000) {
 
-              emailNotice(s"""$url:RTime_is_over:$rt:ms"""")
+              emailNotice(s"""$url:interfaceType:$interfaceType:RTime_is_over:$rt:ms"""")
 
               set.+=(interfaceType)
 

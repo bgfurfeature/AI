@@ -37,7 +37,7 @@ object Start  extends CLogger {
 
   }
 
-  val PERIOD_TIME = 60 * 1000 * 10
+  val PERIOD_TIME = 60 * 1000
 
   def main(args: Array[String]) {
 

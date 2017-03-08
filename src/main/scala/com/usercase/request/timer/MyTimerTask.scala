@@ -112,12 +112,14 @@ class MyTimerTask(parser:Dom4jParser)
 
     }
 
+    // notice.notice(res)
+
     res.foreach{ jSONObject =>
 
       warnLog(logFileInfo, jSONObject.toString)
 
        if(jSONObject.get("status").toString == "false") {
-         errorLog(logFileInfo, jSONObject.toString)
+         // errorLog(logFileInfo, jSONObject.toString)
          println(jSONObject)
        }
 

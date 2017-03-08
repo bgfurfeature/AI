@@ -235,4 +235,18 @@ object DataPrepare  extends CLogger {
 
   }
 
+  // pick 50 test stock hy, gn
+  def pickData(file:String) =  {
+
+    val stock = Source.fromFile(file).getLines().mkString(",")
+    println(stock)
+
+  }
+
+  def main(args: Array[String]) {
+
+    pickData("F:\\datatest\\telecom\\wokong\\stock")
+
+  }
+
 }

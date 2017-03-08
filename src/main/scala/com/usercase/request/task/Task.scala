@@ -19,6 +19,8 @@ class Task (line: String, httpData: HttpData, rclass:RespondParserReflect) exten
 
     var methodG = ""
 
+    var httpG = ""
+
     try {
       val ls = line.split("\t")
 
@@ -32,6 +34,8 @@ class Task (line: String, httpData: HttpData, rclass:RespondParserReflect) exten
 
       methodG = method
 
+      httpG = http
+
       result = RespondTime.time(parameter, rclass.runMethod)
 
     } catch {
@@ -39,7 +43,8 @@ class Task (line: String, httpData: HttpData, rclass:RespondParserReflect) exten
       case e:Exception =>
 
         result = new Result().resultFormat().put("RT","3000")
-          .put("TaskError","Exception").put("接口",s"$methodG")
+          .put("TaskError","Exception").put("interfaceType",s"$methodG")
+          .put("url",s"$httpG")
 
     }
 

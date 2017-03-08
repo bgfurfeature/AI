@@ -129,7 +129,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
     // warnLog(logFileInfo, "finalUrl: "  + finalUrl)
 
     var connect = Jsoup.connect(strUrl)
-      .timeout(5000)
+      .timeout(20000)
 
     try {
 
@@ -160,7 +160,7 @@ class HttpData(userAgent:String, cookie:String, parser:Dom4jParser) extends CLog
 
     try {
        respond = Jsoup.connect(finalUrl)
-        .timeout(10000)
+        .timeout(20000)
         .execute()
         .body()
     } catch  {
