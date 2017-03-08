@@ -11,6 +11,22 @@ class FXRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   extends RespondParser {
 
 
+  // ajax_result_stock
+  def getResultStrock = {
+
+    val res = new Result()
+
+    val respond = _responder.requestWK(url, parameter.+=("sessionid" -> sessionid))
+
+    val resp = respond._1
+
+    url = respond._2
+
+    println(resp)
+
+  }
+
+
 
   // 多个接口间结果的使用
   var sessionid = ""

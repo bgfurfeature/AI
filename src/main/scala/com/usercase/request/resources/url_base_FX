@@ -1,0 +1,6 @@
+http://61.147.114.67/cgi-bin/backtest/hotsuggest/1/allsuggest.fcgi	allsuggest
+http://61.147.114.67/cgi-bin/backtest/hotsuggest/1/hotsuggest.fcgi	hotsuggest
+http://61.147.114.67/cgi-bin/backtest/kensho/1/btsentence.fcgi	btsentence
+http://61.147.114.67/cgi-bin/backtest/kensho/1/btyield.fcgi	btyield
+http://61.147.114.67/cgi-bin/backtest/kensho/1/btresult.fcgi	btresult
+http://61.147.114.67/cgi-bin/backtest/search/1/btsearch.fcgi	btsearch

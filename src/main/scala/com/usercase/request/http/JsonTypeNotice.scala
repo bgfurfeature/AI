@@ -22,8 +22,6 @@ class JsonTypeNotice(dom4jParser: Dom4jParser) extends Notice(dom4jParser: Dom4j
 
     resLB.foreach { jSONObject =>
 
-      warnLog(logFileInfo, jSONObject.toString)
-
       if(jSONObject.has("url") && jSONObject.has("interfaceType") ) {
 
         val url = jSONObject.get("url").toString
@@ -31,8 +29,6 @@ class JsonTypeNotice(dom4jParser: Dom4jParser) extends Notice(dom4jParser: Dom4j
         val interfaceType = jSONObject.get("interfaceType").toString
 
         if (jSONObject.get("status").toString == "false") {
-
-          errorLog(logFileInfo, jSONObject.toString)
 
         if (!set.contains(interfaceType)) {
 

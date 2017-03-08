@@ -6,6 +6,7 @@ import com.bgfurfeature.config.Dom4jParser
 import com.bgfurfeature.log.CLogger
 import com.usercase.request.http.{HttpData, JsonTypeNotice}
 import com.usercase.request.timer.MyTimerTask
+import org.apache.log4j.{Level, Logger}
 
 import scala.io.Source
 
@@ -36,11 +37,13 @@ object Start  extends CLogger {
 
   }
 
+  val PERIOD_TIME = 60 * 1000 * 10
+
   def main(args: Array[String]) {
 
     val Array(xmlFile) = args
 
-    val PERIOD_TIME = 60 * 1000 * 10
+    Logger.getLogger(classOf[CLogger]).setLevel(Level.ERROR)
 
     val task = new MyTimerTask(parser = init(xmlFile))
 

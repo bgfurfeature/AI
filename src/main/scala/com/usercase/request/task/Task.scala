@@ -17,6 +17,8 @@ class Task (line: String, httpData: HttpData, rclass:RespondParserReflect) exten
 
     var result: JSONObject = new json.JSONObject()
 
+    var methodG = ""
+
     try {
       val ls = line.split("\t")
 
@@ -28,13 +30,16 @@ class Task (line: String, httpData: HttpData, rclass:RespondParserReflect) exten
 
       val parameter = (method, http, param, httpData)
 
+      methodG = method
+
       result = RespondTime.time(parameter, rclass.runMethod)
 
     } catch {
 
       case e:Exception =>
 
-        result = new Result().resultFormat().put("RT","3000").put("error","Exception")
+        result = new Result().resultFormat().put("RT","3000")
+          .put("TaskError","Exception").put("接口",s"$methodG")
 
     }
 

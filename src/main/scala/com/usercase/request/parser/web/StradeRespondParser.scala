@@ -1,4 +1,4 @@
-package com.usercase.request.parser.data
+package com.usercase.request.parser.web
 
 import com.usercase.request.http.HttpData
 import com.usercase.request.parser.RespondParser

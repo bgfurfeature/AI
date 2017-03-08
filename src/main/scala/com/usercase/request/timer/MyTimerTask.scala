@@ -3,6 +3,7 @@ package com.usercase.request.timer
 import java.util.TimerTask
 
 import com.bgfurfeature.config.Dom4jParser
+import com.bgfurfeature.log.CLogger
 import com.bgfurfeature.threadpool.ThreadPool
 import com.usercase.request.DataPrepare
 import com.usercase.request.http.{HttpData, JsonTypeNotice}
@@ -17,7 +18,8 @@ import scala.io.Source
   * Created by C.J.YOU on 2017/2/21.
   * 定时开始请求的Task类
   */
-class MyTimerTask(parser:Dom4jParser) extends TimerTask {
+class MyTimerTask(parser:Dom4jParser)
+  extends TimerTask with  CLogger {
 
   var plate_form_id = parser.getParameterByTagName("Plateform.name")
 
@@ -85,7 +87,6 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
         } else  {
 
           res.++=(httpTest(RequestFilePath, myFlect))
-
           // notice.notice(res)
 
         }
@@ -101,18 +102,25 @@ class MyTimerTask(parser:Dom4jParser) extends TimerTask {
         } else  {
 
           res.++=(httpTest(RequestFilePath, myFlect))
-
           // notice.notice(res)
 
         }
 
+      // 模拟交易
       case "Stread" =>
 
 
     }
 
-    res.foreach{ x =>
-      if(x.get("status").toString == "false") println(x)
+    res.foreach{ jSONObject =>
+
+      warnLog(logFileInfo, jSONObject.toString)
+
+       if(jSONObject.get("status").toString == "false") {
+         errorLog(logFileInfo, jSONObject.toString)
+         println(jSONObject)
+       }
+
     }
 
 

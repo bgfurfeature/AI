@@ -1,7 +1,7 @@
 package com.usercase.request.parser.web
 
 import com.usercase.request.http.HttpData
-import com.usercase.request.parser.{RespondParser, Result}
+import com.usercase.request.parser.RespondParser
 import org.json.JSONObject
 
 import scala.collection.mutable.ListBuffer
@@ -26,13 +26,10 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
   def getBackTest = {
 
-    val res = new Result
-
-    val respond = _responder.requestWK(url, parameter)
-
-    val resp = respond._1
-
-    url = respond._2
+    val tuple = init(url, parameter, _responder)
+    val res = tuple._1
+    val resp = tuple._2
+    url = tuple._3
 
     res.format("url",url).put("interfaceType","getBackTest").put("接口:","回测接口")
 
@@ -55,13 +52,10 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   // 11. ajax_get_hy_and_gn_hot.php
   def getHyAndGn = {
 
-    val res = new Result
-
-    val respond = _responder.requestWK(url, parameter)
-
-    val resp = respond._1
-
-    url = respond._2
+    val tuple = init(url, parameter, _responder)
+    val res = tuple._1
+    val resp = tuple._2
+    url = tuple._3
 
     res.format("url",url).put("interfaceType","getHyAndGn").put("接口:","行业，热度数据")
 
@@ -94,22 +88,24 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
   def getGrail = {
 
-    getCurve
+    val js = getCurve
+
+    if(js.has("接口")) {
+      js.remove("接口")
+    }
+    js.put("接口","大盘数据曲线")
 
   }
 
   // 9: ajax_get_curve.php
   def getCurve = {
 
-    val res = new Result()
+    val tuple = init(url, parameter, _responder)
+    val res = tuple._1
+    val resp = tuple._2
+    url = tuple._3
 
-    val respond = _responder.requestWK(url, parameter)
-
-    val resp = respond._1
-
-    url = respond._2
-
-    res.format("url",url).put("interfaceType","getCurve").put("接口:","大盘数据")
+    res.format("url",url).put("interfaceType","getCurve").put("接口","股票大盘数据")
 
     val status = new JSONObject(resp).get("status").toString
 
@@ -155,13 +151,10 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   // 7. ajax_get_real_time_hot
   def getRealTimeHot = {
 
-    val res = new Result()
-
-    val respond = _responder.requestWK(url, parameter)
-
-    val resp = respond._1
-
-    url = respond._2
+    val tuple = init(url, parameter, _responder)
+    val res = tuple._1
+    val resp = tuple._2
+    url = tuple._3
 
     res.format("url",url).put("interfaceType","ajax_get_real_time_hot").put("接口:","A股市场实时热度数据")
 
@@ -184,13 +177,10 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   // 6. ajax_get_news_trend.php
   def getNewTrend = {
 
-    val res = new Result()
-
-    val respond = _responder.requestWK(url, parameter)
-
-    val resp = respond._1
-
-    url = respond._2
+    val tuple = init(url, parameter, _responder)
+    val res = tuple._1
+    val resp = tuple._2
+    url = tuple._3
 
     res.format("url",url).put("interfaceType","ajax_get_news_trend").put("接口:","新闻走势")
 
@@ -221,13 +211,10 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   // 5. ajax_get_hotrecord.php
   def getHotRecord = {
 
-    val res = new Result()
-
-    val respond = _responder.requestWK(url, parameter)
-
-    val resp = respond._1
-
-    url = respond._2
+    val tuple = init(url, parameter, _responder)
+    val res = tuple._1
+    val resp = tuple._2
+    url = tuple._3
 
     res.format("url",url).put("interfaceType","ajax_get_hotrecord").put("接口:","单只股票月热度数据")
 
@@ -259,17 +246,16 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   // 关联谱图数据
   def getRelaeshg = {
 
-    val res = new Result()
-
-    val respond = _responder.requestWK(url, parameter)
-
-    val resp = respond._1
-
-    url = respond._2
+    val tuple = init(url, parameter, _responder)
+    val res = tuple._1
+    val resp = tuple._2
+    url = tuple._3
 
     res.format("url",url).put("interfaceType","ajax_get_relate_shg").put("接口:","关联谱图数据")
 
     if(resp != "{}") {
+
+      val items = Array("event","industry","notion","stock")
 
       val status = new JSONObject(resp).get("status").toString
 
@@ -277,18 +263,22 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
         val jSONObject = new JSONObject(resp)
 
-        val event = jSONObject.getJSONArray("event").length()
+        var flag = "false"
 
-        val industry = jSONObject.getJSONArray("industry").length()
+        var lb = new ListBuffer[String]
 
-        val notion = jSONObject.getJSONArray("notion").length()
+        items.foreach { item =>
 
-        val stock = jSONObject.getJSONArray("stock").length()
+          val value = jSONObject.getJSONArray(item).length()
 
-        val size = (event > 0 ) || industry > 0 || notion > 0 || stock > 0
+          if(value > 0)
+            flag = "true"
 
-        res.resultFormat(size.toString,
-          "event:"+event + ",industry:" + industry +",notion:"+ notion + ",stock:" + stock)
+          lb.+=(s"$item:$value")
+
+        }
+
+        res.resultFormat(flag,lb.mkString(","))
 
       } else {
 
@@ -307,13 +297,10 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   // 收益率数据接口
   def getRateLine = {
 
-    val res = new Result()
-
-    val respond = _responder.requestWK(url, parameter)
-
-    val resp = respond._1
-
-    url = respond._2
+    val tuple = init(url, parameter, _responder)
+    val res = tuple._1
+    val resp = tuple._2
+    url = tuple._3
 
     res.format("url",url).put("interfaceType","ajax_get_rateline").put("接口:","收益率数据接口")
 
@@ -363,13 +350,10 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   )
   def getRelatedInfo = {
 
-    val res = new Result()
-
-    val respond = _responder.requestWK(url, parameter)
-
-    val resp = respond._1
-
-    url = respond._2
+    val tuple = init(url, parameter, _responder)
+    val res = tuple._1
+    val resp = tuple._2
+    url = tuple._3
 
     res.format("url",url).put("interfaceType","ajax_get_related_info").put("接口:","关联资讯")
 
@@ -402,7 +386,7 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
 
 
          }
-          res.resultFormat(status , if(golbalString.nonEmpty) golbalString else "work right")
+          res.resultFormat(status , if(golbalString.nonEmpty) golbalString else "all works right")
 
        } else {
 
@@ -425,13 +409,10 @@ class WKRespondParser(var url: String, parameter: scala.collection.mutable.HashM
   // ajax_get_hot_data.php	hottype=gn&hotval=大盘	getHotData
   def getHotData = {
 
-    val res = new Result()
-
-    val respond = _responder.requestWK(url, parameter)
-
-    val resp = respond._1
-
-    url = respond._2
+    val tuple = init(url, parameter, _responder)
+    val res = tuple._1
+    val resp = tuple._2
+    url = tuple._3
 
     res.format("url",url).put("interfaceType","ajax_get_hot_data").put("接口:","所有热度排行")
 
