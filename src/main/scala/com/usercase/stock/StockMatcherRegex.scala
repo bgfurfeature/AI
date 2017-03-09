@@ -70,7 +70,7 @@ object StockMatcherRegex {
 
       val url = data(3) + data(4)
 
-      var i: Int = 0
+      var x: Int = 0
 
       var stockC: String = ""
 
