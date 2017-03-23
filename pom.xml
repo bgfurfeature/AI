@@ -184,12 +184,34 @@
       <version>2.0.2</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch -->
+    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib_2.11 -->
     <dependency>
-      <groupId>org.elasticsearch</groupId>
-      <artifactId>elasticsearch</artifactId>
-      <version>5.1.1</version>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-mllib_2.11</artifactId>
+      <version>2.0.2</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
+    <dependency>
+      <groupId>org.apache.zookeeper</groupId>
+      <artifactId>zookeeper</artifactId>
+      <version>3.4.9</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-client</artifactId>
+      <version>2.7.3</version>
+    </dependency>
+
+    <!-- Apache Commons Collections -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <version>4.0</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/com.ning/async-http-client -->
     <dependency>
       <groupId>com.ning</groupId>
@@ -201,6 +223,13 @@
       <groupId>net.databinder.dispatch</groupId>
       <artifactId>dispatch-core_2.10</artifactId>
       <version>0.11.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch -->
+    <dependency>
+      <groupId>org.elasticsearch</groupId>
+      <artifactId>elasticsearch</artifactId>
+      <version>5.1.1</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch-spark_2.11 -->
@@ -217,12 +246,6 @@
       <version>5.0.0</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
-    <dependency>
-      <groupId>org.apache.zookeeper</groupId>
-      <artifactId>zookeeper</artifactId>
-      <version>3.4.9</version>
-    </dependency>
 
     <!-- https://mvnrepository.com/artifact/com.github.pathikrit/better-files_2.11 -->
     <dependency>
@@ -278,12 +301,6 @@
       <version>1.0.8</version>
     </dependency>
 
-    <!-- Apache Commons Collections -->
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-collections4</artifactId>
-      <version>4.0</version>
-    </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
     <dependency>
@@ -292,12 +309,14 @@
       <version>1.7.2</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib_2.11 -->
+
+    <!-- https://mvnrepository.com/artifact/io.vertx/vertx-core -->
     <dependency>
-      <groupId>org.apache.spark</groupId>
-      <artifactId>spark-mllib_2.11</artifactId>
-      <version>2.0.2</version>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-core</artifactId>
+      <version>3.4.1</version>
     </dependency>
+
 
 
   </dependencies>
