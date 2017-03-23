@@ -11,6 +11,7 @@ import scala.util.{Failure, Success, Try}
 
 /**
   * Created by C.J.YOU on 2016/12/8.
+  *
   */
 class Dom4jParser (xmlFilePath:String) extends Parameter with CLogger  {
 
@@ -31,7 +32,9 @@ class Dom4jParser (xmlFilePath:String) extends Parameter with CLogger  {
       case Failure(exception) => println("getDocumentExcetion:" +exception.getMessage)
     }
 
-    result.asInstanceOf[Document]
+    val res = result.asInstanceOf[Document]
+
+    res
 
   }
 
@@ -73,6 +76,11 @@ class Dom4jParser (xmlFilePath:String) extends Parameter with CLogger  {
 
   }
 
+  /**
+    * xml 全路径
+    * @param tagName tagName: File.url
+    * @return
+    */
   override def getParameterByTagName(tagName: String) = {
 
     if (parameters.isEmpty)

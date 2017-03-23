@@ -4,6 +4,7 @@ import com.bgfurfeature.util.{FileUtil, TimeUtil}
 import org.apache.flink.api.scala.{DataSet, ExecutionEnvironment, _}
 /**
   * Created by C.J.YOU on 2016/12/30.
+  * flink operation
   */
 object SHStockHeat {
 
