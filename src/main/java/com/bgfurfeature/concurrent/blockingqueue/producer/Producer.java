@@ -5,7 +5,8 @@ import java.util.concurrent.BlockingQueue;
 /**
  * 数据生产者线程
  */
-public class Producer implements Runnable {  
+public class Producer implements Runnable {
+
     BlockingQueue<String> queue;    
     public Producer(BlockingQueue<String> queue) {  
         this.queue = queue;  

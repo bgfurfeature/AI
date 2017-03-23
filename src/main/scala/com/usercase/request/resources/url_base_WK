@@ -1,0 +1,12 @@
+http://stock.iwookong.com/ajax/ajax_get_related_info.php	getRelatedInfo
+http://stock.iwookong.com/ajax/ajax_get_rateline.php	getRateLine
+http://stock.iwookong.com/ajax/ajax_get_hotrecord.php	getHotRecord
+http://stock.iwookong.com/ajax/ajax_get_single_real_time_hot.php	getSingleRealTime
+http://stock.iwookong.com/ajax/ajax_get_real_time_hot.php	getRealTimeHot
+http://stock.iwookong.com/ajax/ajax_get_curve.php	getCurve
+http://stock.iwookong.com/ajax/ajax_get_grail.php	getCurve
+http://stock.iwookong.com/ajax/ajax_get_news_trend.php	getNewTrend
+http://stock.iwookong.com/ajax/ajax_get_relate_shg.php	getRelaeshg
+http://stock.iwookong.com/ajax/ajax_get_hy_and_gn_hot.php	getHyAndGn
+http://stock.iwookong.com/ajax/ajax_get_hot_data.php	getHotData
+http://stock.iwookong.com/ajax/infocenter/ajax_get_back_test.php	getBackTest

@@ -14,7 +14,6 @@ public class ThreadPoolWithRunable {
 		ExecutorService pool = Executors.newCachedThreadPool();
 		for(int i = 1; i < 5; i++){
 			pool.execute(new Runnable() {
-				@Override
 				public void run() {
 					System.out.println("thread name: " + Thread.currentThread().getName());
 					try {

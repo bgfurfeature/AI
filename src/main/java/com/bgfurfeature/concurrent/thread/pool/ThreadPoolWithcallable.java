@@ -16,7 +16,6 @@ public class ThreadPoolWithcallable {
 		
 		for(int i = 0; i < 10; i++){
 			Future<String> submit = pool.submit(new Callable<String>(){
-				@Override
 				public String call() throws Exception {
 					//System.out.println("a");
 					return "b";
