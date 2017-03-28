@@ -331,20 +331,21 @@
       <version>1.7.2</version>
     </dependency>
 
-
     <!-- https://mvnrepository.com/artifact/io.vertx/vertx-core -->
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-core</artifactId>
-      <version>3.4.1</version>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-core</artifactId>
+        <version>3.3.3</version>
     </dependency>
 
-          <!-- https://mvnrepository.com/artifact/io.vertx/vertx-core -->
-          <dependency>
-              <groupId>io.vertx</groupId>
-              <artifactId>vertx-core</artifactId>
-              <version>3.3.3</version>
-          </dependency>
+
+      <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-scala_2.11 -->
+      <dependency>
+          <groupId>com.fasterxml.jackson.module</groupId>
+          <artifactId>jackson-module-scala_2.11</artifactId>
+          <version>2.8.1</version>
+      </dependency>
+
 
 
 

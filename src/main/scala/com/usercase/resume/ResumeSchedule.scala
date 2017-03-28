@@ -1,16 +1,16 @@
 package com.usercase.resume
 
-import java.util.zip.ZipInputStream
-
 import com.bgfurfeature.config.Dom4jParser
-import com.bgfurfeature.spark.Spark
+import com.usercase.resume.input.RawFileInputFormat
 import io.vertx.core.json.JsonObject
 import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.{PostMethod, StringRequestEntity}
 import org.apache.commons.httpclient.params.HttpClientParams
 import org.apache.commons.io.output.ByteArrayOutputStream
-import org.apache.hadoop.fs.FSDataInputStream
-import org.apache.hadoop.io.BytesWritable
+import org.apache.hadoop.io.{BytesWritable, Text}
+import org.apache.spark.sql.SparkSession
+
+import scala.collection.mutable.ListBuffer
 
 /**
   * Created by devops on 2017/3/27.
@@ -35,11 +35,15 @@ object ResumeSchedule {
   }
 
 
+  val byteArray = new ListBuffer[Byte]()
+
   val stringBuilder = new StringBuilder
 
   def main(args: Array[String]): Unit = {
 
     val Array(xml) = args
+
+    // val xml = "/Users/devops/workspace/shell/conf/resume_conf.xml"
 
     val parse = Dom4jParser.apply(xmlFilePath = xml)
 
@@ -51,40 +55,36 @@ object ResumeSchedule {
 
     val batchDuration = parse.getParameterByTagName("spark.batchDuration")
 
-    val spark = Spark.apply(master , appName, batchDuration.toInt)
 
-    val ssc = spark.ssc
+    val session = SparkSession.builder().appName(appName).master(master).getOrCreate()
 
-    val data = ssc.textFileStream(directory = dir)
+    val sc = session.sparkContext
+
+    val conf = sc.hadoopConfiguration
 
 
-    data.foreachRDD { rdd =>
+    // val file = sc.newAPIHadoopRDD[Text, BytesWritable, RawFileInputFormat](conf, classOf[RawFileInputFormat], classOf[Text], classOf[BytesWritable])
 
-      rdd.foreach(x => stringBuilder.++=(x))
+    val file = sc.newAPIHadoopFile[Text, BytesWritable, RawFileInputFormat](dir + "/*")
+
+    file.foreach { case(key, value) =>
 
       val reqObj = new JsonObject()
-      val fileName = "file_name.pdf"
-      val fileContent = stringBuilder.toString().getBytes
+      val fileName = key.toString
+      val fileContent = value.getBytes
+
       reqObj.put("name", fileName)
       reqObj.put("content", fileContent)
 
       println("reqObj:" + reqObj)
+
       val retVal = postAndReturnString(
-        new HttpClient(new HttpClientParams),
-        "http://localhost:7778/api/extract_by_content",
-        reqObj.encode);
+        new HttpClient(new HttpClientParams), "http://localhost:7778/api/extract_by_content",
+        reqObj.encode());
 
       println("retVal:" + retVal)
 
-      stringBuilder.clear()
-
-
     }
-
-    // ssc.sparkContext.textFile(dir + "/*").foreach(println)
-
-    ssc.start()
-    ssc.awaitTermination()
 
 
   }

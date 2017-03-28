@@ -1,6 +1,7 @@
 package com.bgfurfeature.spark
 
 import org.apache.spark.SparkConf
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
@@ -14,12 +15,14 @@ class Spark(master: String, appName:String, batchDuration: Int) {
   // --conf "spark.some.config.option=some-value"
   // --conf "spark.sql.warehouse.dir=spark-warehouse"
 
+
   val sparkConf = new SparkConf().setMaster(master).setAppName(appName)
 
   val ssc = new StreamingContext(sparkConf, Seconds(batchDuration))
 
   val sc = ssc.sparkContext
 
+  // @2.0 +
   // val sessionBuilder = SparkSession.builder().appName(appName).master(master)
 
 
