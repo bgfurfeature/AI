@@ -15,7 +15,6 @@ class RawFileInputFormat  extends  FileInputFormat[Text, BytesWritable] {
   RecordReader[Text, BytesWritable] = {
 
     new RawFileRecordReader()
-      // .asInstanceOf[RecordReader[Text, BytesWritable]]
 
   }
 

@@ -15,13 +15,13 @@ trait CLogger extends Serializable{
 
   def logConfigure(path: String) = PropertyConfigurator.configure(path)
 
-  def debug(msg: String) = logger.debug(msg)
+  def debug(msg: String) = logger.debug(s""" => {$msg}""")
 
-  def info(msg: String) = logger.info(msg)
+  def info(msg: String) = logger.info(s""" => {$msg}""")
 
-  def warn(msg: String) = logger.warn(msg + "<<<<==============")
+  def warn(msg: String) = logger.warn(s""" => {$msg}""")
 
-  def error(msg: String) = logger.error(msg)
+  def error(msg: String) = logger.error(s""" => {$msg}""")
 
   def exception(e: Exception) = logger.error(e.getStackTrace)
 

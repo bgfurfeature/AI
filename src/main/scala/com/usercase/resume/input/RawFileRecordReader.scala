@@ -16,29 +16,14 @@ import scala.util.control.Breaks
   */
 class RawFileRecordReader extends RecordReader[Text, BytesWritable] {
 
-  /**
-    * InputStream used to read the ZIP file from the FileSystem
-    */
   private var fsin: FSDataInputStream = null
 
-  /**
-    * ZIP file parser/decompresser
-    */
   private var zip : ZipInputStream = null
 
-  /**
-    * Uncompressed file name
-    */
   private var currentKey: Text = null
 
-  /**
-    * Uncompressed file contents
-    */
   private var currentValue: BytesWritable = null
 
-  /**
-    * Used to indicate progress
-    */
   private var isFinished = false
 
 
@@ -61,7 +46,9 @@ class RawFileRecordReader extends RecordReader[Text, BytesWritable] {
 
       return false
 
-    } else if(zip == null) { // doc,docx, txt
+    } else if(zip == null) { // doc,docx,txt,pdf
+
+      // println("read other type file")
 
       bos = new ByteArrayOutputStream()
 
@@ -90,9 +77,9 @@ class RawFileRecordReader extends RecordReader[Text, BytesWritable] {
 
       isFinished = true
 
-      return  true
-
     } else { // ZIP
+
+      // println("read zip file")
 
       bos = new ByteArrayOutputStream()
 
@@ -132,12 +119,17 @@ class RawFileRecordReader extends RecordReader[Text, BytesWritable] {
 
       zip.closeEntry()
 
-      currentValue = new BytesWritable(bos.toByteArray())
-      isFinished = true
-
-      return true
-
     }
+
+    bos.flush()
+
+    currentValue = new BytesWritable(bos.toByteArray())
+
+    isFinished = true
+
+    // println("currentvalue:" + currentValue)
+
+    return true
 
   }
 
@@ -157,9 +149,16 @@ class RawFileRecordReader extends RecordReader[Text, BytesWritable] {
       fsin = fs.open(path)
 
       if (path.getName().endsWith(".zip")) {
+
         zip = new ZipInputStream(fsin, Charset.forName("GBK"))
+
+        println("zip file")
+
       } else {
         currentKey = new Text(path.getName())
+
+        // println("other type file")
+
       }
 
     }

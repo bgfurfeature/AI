@@ -1,6 +1,7 @@
 package com.usercase.resume
 
 import com.bgfurfeature.config.Dom4jParser
+import com.bgfurfeature.log.CLogger
 import com.usercase.resume.input.RawFileInputFormat
 import io.vertx.core.json.JsonObject
 import org.apache.commons.httpclient.HttpClient
@@ -15,7 +16,7 @@ import scala.collection.mutable.ListBuffer
 /**
   * Created by devops on 2017/3/27.
   */
-object ResumeSchedule {
+object ResumeSchedule  extends  CLogger {
 
   def postAndReturnString(client: HttpClient, url: String, body: String): String  = {
 
@@ -55,6 +56,11 @@ object ResumeSchedule {
 
     val batchDuration = parse.getParameterByTagName("spark.batchDuration")
 
+    val httpUrl = parse.getParameterByTagName("router.extract_by_content")
+
+    val loggerPath = parse.getParameterByTagName("logger.configure")
+
+    logConfigure(loggerPath)
 
     val session = SparkSession.builder().appName(appName).master(master).getOrCreate()
 
@@ -65,24 +71,28 @@ object ResumeSchedule {
 
     // val file = sc.newAPIHadoopRDD[Text, BytesWritable, RawFileInputFormat](conf, classOf[RawFileInputFormat], classOf[Text], classOf[BytesWritable])
 
-    val file = sc.newAPIHadoopFile[Text, BytesWritable, RawFileInputFormat](dir + "/*")
+    // new api in mapreduce.input...
+    val file = sc.newAPIHadoopFile[Text, BytesWritable, RawFileInputFormat](dir)
 
     file.foreach { case(key, value) =>
 
       val reqObj = new JsonObject()
-      val fileName = key.toString
-      val fileContent = value.getBytes
 
-      reqObj.put("name", fileName)
-      reqObj.put("content", fileContent)
+      if(key != null && value != null) {
 
-      println("reqObj:" + reqObj)
+        val fileName = key.toString
+        val fileContent = value.getBytes
 
-      val retVal = postAndReturnString(
-        new HttpClient(new HttpClientParams), "http://localhost:7778/api/extract_by_content",
-        reqObj.encode());
+        reqObj.put("name", fileName)
+        reqObj.put("content", fileContent)
 
-      println("retVal:" + retVal)
+        // "http://localhost:7778/api/extract_by_content"
+        val retVal = postAndReturnString(new HttpClient(new HttpClientParams), httpUrl, reqObj.encode());
+
+        warnLog(logFileInfo, ("\"reqObj\":" + reqObj.toString + "," + "\"retVal\":" + retVal))
+
+      }
+
 
     }
 
