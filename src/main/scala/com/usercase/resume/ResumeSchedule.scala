@@ -8,6 +8,7 @@ import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.{PostMethod, StringRequestEntity}
 import org.apache.commons.httpclient.params.HttpClientParams
 import org.apache.commons.io.output.ByteArrayOutputStream
+import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.hadoop.io.{BytesWritable, Text}
 import org.apache.spark.sql.SparkSession
 
@@ -36,10 +37,6 @@ object ResumeSchedule  extends  CLogger {
   }
 
 
-  val byteArray = new ListBuffer[Byte]()
-
-  val stringBuilder = new StringBuilder
-
   def main(args: Array[String]): Unit = {
 
     val Array(xml) = args
@@ -49,6 +46,8 @@ object ResumeSchedule  extends  CLogger {
     val parse = Dom4jParser.apply(xmlFilePath = xml)
 
     val dir = parse.getParameterByTagName("monitor.dir")
+
+    val dst = parse.getParameterByTagName("monitor.dst")
 
     val appName = parse.getParameterByTagName("spark.appName")
 
@@ -66,13 +65,18 @@ object ResumeSchedule  extends  CLogger {
 
     val sc = session.sparkContext
 
-    val conf = sc.hadoopConfiguration
+    // hadoop configuration
+    val hadoopConf = sc.hadoopConfiguration
 
+    // mv org resume data to dst path
+    val fs  = FileSystem.get(hadoopConf)
 
     // val file = sc.newAPIHadoopRDD[Text, BytesWritable, RawFileInputFormat](conf, classOf[RawFileInputFormat], classOf[Text], classOf[BytesWritable])
 
     // new api in mapreduce.input...
     val file = sc.newAPIHadoopFile[Text, BytesWritable, RawFileInputFormat](dir)
+
+    val files = file.map(_._1.toString).collect()
 
     file.foreach { case(key, value) =>
 
@@ -84,10 +88,10 @@ object ResumeSchedule  extends  CLogger {
         val fileContent = value.getBytes
 
         reqObj.put("name", fileName)
-        reqObj.put("content", fileContent)
+        // reqObj.put("content", fileContent)
 
         // "http://localhost:7778/api/extract_by_content"
-        val retVal = postAndReturnString(new HttpClient(new HttpClientParams), httpUrl, reqObj.encode());
+        val retVal = postAndReturnString(new HttpClient(new HttpClientParams), httpUrl, reqObj.encode())
 
         warnLog(logFileInfo, ("\"reqObj\":" + reqObj.toString + "," + "\"retVal\":" + retVal))
 
@@ -95,6 +99,21 @@ object ResumeSchedule  extends  CLogger {
 
 
     }
+
+    warn(s""""files":${files.size}""")
+
+    // 判断文件是否存在，存在则删除
+    files.foreach { fileName =>
+
+      val path = new Path(dst + "/" + fileName)
+
+      val isExist = fs.exists(path)
+
+      if(isExist) fs.deleteOnExit(path)
+
+    }
+
+    fs.close()
 
 
   }
