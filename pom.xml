@@ -180,7 +180,22 @@
       <version>1.2.5</version>
       <scope>test</scope>
     </dependency>
-    <!-- Use this dependency if you are using the DataStream API -->
+
+      <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-server -->
+      <dependency>
+          <groupId>org.apache.hbase</groupId>
+          <artifactId>hbase-server</artifactId>
+          <version>1.2.0</version>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
+      <dependency>
+          <groupId>org.apache.hbase</groupId>
+          <artifactId>hbase-client</artifactId>
+          <version>1.2.0</version>
+      </dependency>
+
+      <!-- Use this dependency if you are using the DataStream API -->
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-streaming-scala_2.11</artifactId>
@@ -345,7 +360,6 @@
           <artifactId>vertx-web</artifactId>
           <version>3.4.1</version>
       </dependency>
-
 
       <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-scala_2.11 -->
       <dependency>
