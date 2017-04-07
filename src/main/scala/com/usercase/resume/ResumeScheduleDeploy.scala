@@ -49,7 +49,7 @@ object ResumeScheduleDeploy {
   def main(args: Array[String]): Unit = {
 
 
-    val Array(dir, result) = args
+    val Array(dir, dst) = args
 
     val sc = new SparkContext(new SparkConf().setAppName("ResumeExtraction"))
 
@@ -87,6 +87,7 @@ object ResumeScheduleDeploy {
     val result = all_data.map { info =>
 
       var flag = 1
+      var key = ""
 
       val infoSplit = info.split("\t")
 
@@ -144,6 +145,9 @@ object ResumeScheduleDeploy {
 
 
       }
+
+      (key, flag)
+
     }
 
 
