@@ -16,7 +16,7 @@ import org.apache.spark.rdd.RDD
 /**
   * Created by devops on 2017/4/6.
   */
-class HBaseUtil extends HBase with CLogger {
+class HBaseUtil(isConfig: Boolean) extends HBase with CLogger {
 
   // 自定义访问hbase的接口（属于HBASE 的一些属性）
 
@@ -44,14 +44,18 @@ class HBaseUtil extends HBase with CLogger {
 
   }
 
-  def getConfiguration(default: Boolean = true) = {
+  def configuration = hBaseConfiguration
+
+  private  def getConfiguration() = {
 
     val hBaseConfiguration = HBaseConfiguration.create()
 
-    if(default == true) {
+    if(isConfig) {
       warn("hbase setDefaultConfiguration....")
       setDefaultConfiguration(hBaseConfiguration)
     } else  {
+
+      println("use config")
 
       hBaseConfiguration
     }
@@ -97,14 +101,17 @@ class HBaseUtil extends HBase with CLogger {
     * 创建hbase表
     * @param tableName 表名
     * @param columnFamilies 列族的声明
-    * @param connection 连接器
+    *
     */
-  def createHBaseTable(tableName: TableName, columnFamilies:List[String], connection: Connection): Table = {
+  def createHBaseTable(tableName: String, columnFamilies:List[String]): Table = {
 
     // connection.getAdmin.createTable(new HTableDescriptor(tableName).addFamily(new HColumnDescriptor(columnFamily).setMaxVersions(3)))
 
     val admin = connection.getAdmin
-    val htd = new HTableDescriptor(tableName)
+
+    val table = TableName.valueOf(tableName)
+
+    val htd = new HTableDescriptor(table)
 
     for (family <- columnFamilies) {
 
@@ -113,12 +120,15 @@ class HBaseUtil extends HBase with CLogger {
 
     }
 
-    admin.createTable(htd)
+    if(!admin.tableExists(table)) {
+      admin.createTable(htd)
+    }
+
     admin.close()
 
-    val table = connection.getTable(tableName)
+    val htable = connection.getTable(table)
 
-    table
+    htable
 
   }
 

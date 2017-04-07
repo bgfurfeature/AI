@@ -17,7 +17,11 @@ object TestHbase {
 
     val sc = new SparkContext(new SparkConf().setAppName("TestHbase").setMaster("local"))
 
-    val hbase = new HBaseUtil
+    val hbase = new HBaseUtil(false)
+
+    hbase.setConfiguration(Map("hbase.rootdir" -> "hdfs://server1:9000/hbase"))
+
+    hbase.createHBaseTable("resume_file", List("data","index"))
 
     val property = new mutable.HashMap[String, String]()
     property.+=(TableInputFormat.INPUT_TABLE -> "resume_file")
