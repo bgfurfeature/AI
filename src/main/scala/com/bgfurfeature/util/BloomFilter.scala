@@ -7,9 +7,9 @@ class BloomFilter (bitsLength: Int) {
 
     import java.util
 
-    private  final val DEFAULT_SIZE = 2 << bitsLength
+    private  final val DEFAULT_SIZE = 2 << bitsLength // 24bit
 
-    private  final val seeds = Array(7, 11, 12, 31, 37, 61)
+    private  final val seeds = Array(7, 11, 12, 31, 37, 61) // 6bit hash function
 
     private  val  bits = new util.BitSet(DEFAULT_SIZE)
 
@@ -23,14 +23,14 @@ class BloomFilter (bitsLength: Int) {
     // 添加没有的数据
     def add(value:String)= {
 
-      if(!contain(value)) {
+      // if(!contain(value)) {
         for(i <- func.indices){
           bits.set(func(i).hash(value),true)
-        }
+      //   }
       }
     }
 
-    // 判断是否包含value
+    // 判断是否包含value（每个hash函数映射的位都一样的时候才判断为存在）
     def contain(value:String) : Boolean = {
       if(value == null)
         return false
