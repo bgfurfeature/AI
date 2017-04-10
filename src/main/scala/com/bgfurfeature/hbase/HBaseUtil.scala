@@ -165,7 +165,7 @@ class HBaseUtil(isConfig: Boolean) extends HBase with CLogger {
   def  getDataFormHbase(rowKey:String, table: Table, colmnFamily:String, qualifier: String):
   String = {
 
-    val result = table.get(new Get(getBytes(rowKey));
+    val result = table.get(new Get(getBytes(rowKey)));
 
     result.getValue(getBytes(colmnFamily), getBytes(qualifier)).toString
 
