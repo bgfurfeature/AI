@@ -97,6 +97,11 @@ class HBaseUtil(isConfig: Boolean) extends HBase with CLogger {
     connection
   }
 
+  def shutDown() ={
+    connection.close()
+
+  }
+
   /**
     * 创建hbase表
     * @param tableName 表名
@@ -126,7 +131,7 @@ class HBaseUtil(isConfig: Boolean) extends HBase with CLogger {
 
     admin.close()
 
-    val htable = connection.getTable(table)
+    val htable = getHTable(tableName)
 
     htable
 
@@ -136,12 +141,10 @@ class HBaseUtil(isConfig: Boolean) extends HBase with CLogger {
   /**
     * 判断 row key 是否存在
     * @param row rowKey
-    * @param  tableName tableName
+    * @param  table table
     * @return Boolean
     */
-  def existRowKey(row:String, tableName: String): Boolean ={
-
-    val table = connection.getTable(TableName.valueOf(tableName))
+  def existRowKey(row:String, table:Table): Boolean = {
 
     val get = new Get(getBytes(row))
     val result = table.get(get)
@@ -152,6 +155,19 @@ class HBaseUtil(isConfig: Boolean) extends HBase with CLogger {
     }
 
     true
+
+  }
+
+  def getHTable(tableName: String) = {
+    connection.getTable(TableName.valueOf(tableName))
+  }
+
+  def  getDataFormHbase(rowKey:String, table: Table, colmnFamily:String, qualifier: String):
+  String = {
+
+    val result = table.get(new Get(getBytes(rowKey));
+
+    result.getValue(getBytes(colmnFamily), getBytes(qualifier)).toString
 
   }
 
@@ -184,13 +200,11 @@ class HBaseUtil(isConfig: Boolean) extends HBase with CLogger {
 
   /**
     * 批量写数据入 Hbase中
-    * @param tableName
+    * @param table
     * @param rowKey
     * @param data
     */
-  def putToHbase(tableName:String, rowKey: String, data: RDD[DataFormatForTable]) = {
-
-    val table = connection.getTable(TableName.valueOf(tableName))
+  def putToHbase(table:Table, rowKey: String, data: RDD[DataFormatForTable]) = {
 
     data.foreachPartition { iterator => {
 
