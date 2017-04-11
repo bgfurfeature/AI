@@ -24,6 +24,7 @@ import io.vertx.ext.web.handler.BodyHandler;
 */
 /**
  * Created by koth on 2017/4/10.
+ * http下 载服务（下载hbase中的文件）
  *//*
 
 public class HBaseResumeServing {
