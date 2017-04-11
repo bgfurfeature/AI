@@ -162,12 +162,11 @@ class HBaseUtil(isConfig: Boolean) extends HBase with CLogger {
     connection.getTable(TableName.valueOf(tableName))
   }
 
-  def  getDataFormHbase(rowKey:String, table: Table, colmnFamily:String, qualifier: String):
-  String = {
+  def  getDataFormHbase(rowKey:String, table: Table, colmnFamily:String, qualifier: String) = {
 
-    val result = table.get(new Get(getBytes(rowKey)));
+    val result = table.get(new Get(getBytes(rowKey)))
 
-    result.getValue(getBytes(colmnFamily), getBytes(qualifier)).toString
+    result.getValue(getBytes(colmnFamily), getBytes(qualifier))
 
   }
 
@@ -223,4 +222,8 @@ class HBaseUtil(isConfig: Boolean) extends HBase with CLogger {
     table.close()
   }
 
+}
+
+object HBaseUtil {
+  def apply(isConfig: Boolean): HBaseUtil = new HBaseUtil(isConfig)
 }
