@@ -39,6 +39,19 @@
       <name>Scala-Tools Maven2 Repository</name>
       <url>http://scala-tools.org/repo-releases</url>
     </repository>
+
+      <repository>
+          <id>cloudera.com</id>
+          <name>mvn-repository</name>
+          <url>https://repository.cloudera.com/content/repositories/releases/</url>
+          <layout>default</layout>
+          <releases>
+              <enabled>true</enabled>
+          </releases>
+          <snapshots>
+              <enabled>false</enabled>
+          </snapshots>
+      </repository>
   </repositories>
 
   <pluginRepositories>

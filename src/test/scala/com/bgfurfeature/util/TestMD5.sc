@@ -18,3 +18,7 @@ val md5hash1 = data.map("%02x".format(_)).mkString
 
 // md5 encode
 val md5Hex = DigestUtils.md5Hex("i am the content".getBytes)
+
+// murmur hash64/32
+
+val flag = "".trim
