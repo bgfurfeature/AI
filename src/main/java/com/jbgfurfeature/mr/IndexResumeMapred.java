@@ -65,6 +65,8 @@ public class IndexResumeMapred extends Configured implements Tool {
 
     @Override
     public void run(Context context) throws IOException, InterruptedException {
+    	// setup -> .. -> cleanup
+    	setup(context);
       int batched = 0;
       BulkRequestBuilder bulkRequest = transportClient.prepareBulk();
       while (context.nextKeyValue()) {

@@ -1,6 +1,7 @@
 import com.bgfurfeature.hbase.HBase;
 import com.bgfurfeature.hbase.HBaseUtil;
 import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -8,6 +9,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
@@ -18,6 +20,7 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.shareddata.LocalMap;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import scala.collection.immutable.List;
 
 /*
  * Created by koth on 2017/4/10.
@@ -27,6 +30,11 @@ import io.vertx.ext.web.handler.BodyHandler;
 public class HBaseResumeServing implements HBase {
 
   private static Logger logger = LoggerFactory.getLogger(HBaseResumeServing.class);
+
+  @Override
+  public ArrayList<Put> toJavaList(List<Put> list) {
+    return super.toJavaList(list);
+  }
 
   public static void main(String[] argv) throws IOException {
     Vertx vtx = Vertx.vertx();
