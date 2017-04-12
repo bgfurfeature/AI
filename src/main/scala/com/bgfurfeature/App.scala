@@ -1,5 +1,7 @@
 package com.bgfurfeature
 
+import scala.collection.mutable.ListBuffer
+
 /**
  * Hello world!
  *
@@ -7,8 +9,6 @@ package com.bgfurfeature
 object App  {
 
   def main(args: Array[String]) {
-
-    println( "Hello World!" )
 
   }
 

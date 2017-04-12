@@ -21,4 +21,6 @@ val md5Hex = DigestUtils.md5Hex("i am the content".getBytes)
 
 // murmur hash64/32
 
-val flag = "".trim
+var flag = "".trim
+
+
