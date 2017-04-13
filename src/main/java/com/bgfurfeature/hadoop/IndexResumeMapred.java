@@ -1,4 +1,4 @@
-package com.inmind.idlg.hadoop;
+package com.bgfurfeature.mr;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -25,6 +25,7 @@ import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.concurrent.TimeUnit;
 
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -47,7 +48,10 @@ public class IndexResumeMapred extends Configured implements Tool {
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
       super.setup(context);
-      transportClient = new PreBuiltTransportClient(Settings.EMPTY)
+      Settings settings = Settings.builder()
+          .put("cluster.name", "idmg").put("client.transport.sniff", false)
+          .put("client.transport.ping_timeout", 20, TimeUnit.SECONDS).build();
+      transportClient = new PreBuiltTransportClient(settings)
           .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("hg001"),
               9300))
           .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("hg002"),
@@ -66,6 +70,7 @@ public class IndexResumeMapred extends Configured implements Tool {
     @Override
     public void run(Context context) throws IOException, InterruptedException {
     	// setup -> .. -> cleanup
+    	// 增加batch的使用，可有效控制批量写操作，用户写逻辑（如写入hbse）中可控制多少批量的数据网habse中flush，降低内存的占用
     	setup(context);
       int batched = 0;
       BulkRequestBuilder bulkRequest = transportClient.prepareBulk();

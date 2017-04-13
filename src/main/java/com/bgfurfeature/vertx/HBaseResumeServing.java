@@ -1,15 +1,16 @@
-import com.bgfurfeature.hbase.HBase;
-import com.bgfurfeature.hbase.HBaseUtil;
+package com.bgfurfeature.vertx;
+
+import com.inmind.idlg.common.ConfigUtils;
+import com.inmind.idlg.hadoop.utils.HTableUtil;
+
 import org.apache.hadoop.hbase.client.Get;
-import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
@@ -20,52 +21,41 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.shareddata.LocalMap;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
-import scala.collection.immutable.List;
 
-/*
+/**
  * Created by koth on 2017/4/10.
- * http下 载服务（下载hbase中的文件）
  */
-
-public class HBaseResumeServing implements HBase {
-
+public class HBaseResumeServing {
   private static Logger logger = LoggerFactory.getLogger(HBaseResumeServing.class);
-
-  @Override
-  public ArrayList<Put> toJavaList(List<Put> list) {
-    return super.toJavaList(list);
-  }
 
   public static void main(String[] argv) throws IOException {
     Vertx vtx = Vertx.vertx();
     LocalMap<String, JsonObject> configJson =
-        vtx.sharedData().<String, JsonObject>getLocalMap("__GLOBAL_MAP__");
+        vtx.sharedData().<String, JsonObject>getLocalMap(ConfigUtils.GLOBAL_MAP_KEY);
     HttpServer server = vtx.createHttpServer();
     int port = 20199;
     if (argv.length > 0) {
       port = Integer.valueOf(argv[0]);
     }
-    HBaseUtil hbase = new HBaseUtil(true);
-    final Table htable = hbase.getHTable("resume_file");
+    final HTable htable = HTableUtil.getHTable("resume_file");
     Router router = Router.router(vtx);
     router.route().handler(BodyHandler.create());
-    // http://server:port/raw/key-example(hbase-rowkey)
     router.get("/raw/:key").handler(routingContext -> {
       try {
 
         String keyStr = routingContext.request().getParam("key");
         logger.info("try get resume:" + keyStr);
-        Get get = new Get(hbase.getBytes(keyStr));
+        Get get = new Get(HTableUtil.gB(keyStr));
         Result result = htable.get(get);
         if (result == null || result.isEmpty()) {
           routingContext.response().setStatusCode(404);
           routingContext.response().end("Not Found");
           return;
         }
-        byte[] nameBytes = result.getValue(Bytes.toBytes("meta"), Bytes.toBytes("filename"));
-        byte[] contentBytes = result.getValue(Bytes.toBytes("data"), Bytes.toBytes("rawcontent"));
+        byte[] nameBytes = result.getValue(HTableUtil.gB("meta"), HTableUtil.gB("filename"));
+        byte[] contentBytes = result.getValue(HTableUtil.gB("data"), HTableUtil.gB("rawcontent"));
         String fileName = new String(nameBytes, Charset.forName("utf8"));
-        logger.info("fileName:" + fileName + ",fileName= " + Bytes.toString(nameBytes));
+        logger.info("fileName:" + fileName + ",fileName=" + Bytes.toString(nameBytes));
         routingContext.response().putHeader("Content-Disposition", "attachment; filename=" +
             URLEncoder.encode(fileName, "utf-8") + ";");
 

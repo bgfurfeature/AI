@@ -1,6 +1,4 @@
-package com.bgfurfeature.mr;
-
-import com.usercase.resume.input.MultipleFileInputFormat;
+package com.jbgfurfeature.hadoop;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.HttpClient;
@@ -13,8 +11,6 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
-import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.Text;
