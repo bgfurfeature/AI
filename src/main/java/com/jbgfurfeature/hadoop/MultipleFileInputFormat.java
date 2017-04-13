@@ -26,8 +26,7 @@ public class MultipleFileInputFormat extends CombineFileInputFormat<Text, BytesW
   public RecordReader<Text, BytesWritable> createRecordReader(InputSplit split,
                                                               TaskAttemptContext context) throws
       IOException {
-    return new CombineFileRecordReader<Text, BytesWritable>((CombineFileSplit) split, context,
-        RawFileRecordReader.class);
+    return new CombineFileRecordReader<Text, BytesWritable>((CombineFileSplit) split, context, com.jbgfurfeature.hadoop.RawFileRecordReader.class);
   }
 
   @Override
