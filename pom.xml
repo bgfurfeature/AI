@@ -359,7 +359,7 @@
       <version>1.7.2</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/io.vertx/vertx-core -->
+    <!-- https://mvnrepository.com/artifact/io.vertx/vertx-core(RECOM:io.vertx:vertx-core:jar:3.3.3) -->
     <dependency>
         <groupId>io.vertx</groupId>
         <artifactId>vertx-core</artifactId>

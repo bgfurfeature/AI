@@ -24,7 +24,7 @@ import io.vertx.ext.web.handler.BodyHandler;
 
 /**
  * Created by koth on 2017/4/10.
- * 使用vertx框架服务
+ * 使用vertx 框架服务 提供从Hbase下载文件服务
  */
 public class HBaseResumeServing {
   private static Logger logger = LoggerFactory.getLogger(HBaseResumeServing.class);
