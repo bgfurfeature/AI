@@ -1,11 +1,11 @@
-package com.bgfurfeature.vertx
+package com.usercase.test
 
 import io.vertx.core.json.JsonObject
 
 /**
-  * Created by Jerry on 2017/4/14.
+  * Created by Jerry on 2017/4/18.
   */
-object VertxCustom {
+object Application {
 
   def main(args: Array[String]): Unit = {
 
