@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package com.inmind.idmg.fingerprint.rpc;
+
+option java_multiple_files = true;
+
+service ResumeFingerPrintService {
+    rpc doFingerPrint(FingerPrintRequest) returns (FingerPrintReply) {
+    };
+}
+
+message WorkExpr {
+  string company=1;
+  string startedAt=2;
+  string endedAt=3;
+}
+
+message EduExpr {
+  string school=1;
+  string startedAt=2;
+  string endedAt=3;
+  string major=4;
+}
+
+message ResumeFeature {
+  string phone=1; // 手机号码
+  string name=2; // 姓名
+  string email=3; // 邮箱
+  repeated WorkExpr workExprs = 4; // 工作经历
+  repeated EduExpr eduExprs = 5; // 教育经历
+  string number=6;
+}
+
+message FingerPrintRequest {
+  // request 特征
+  repeated ResumeFeature features=1;
+}
+
+message ReplayFeature {
+  enum Type {
+    PHONE_AND_NAME=0;
+    EMAIL_AND_NAME=1;
+    PHONE_AND_COMPANY=2;
+    EMAIL_AND_COMPANY=3;
+    PHONE_AND_SCHOOL=4;
+    EMAIL_AND_SCHOOL=5;
+    NAME_AND_FIRST_WORK=6;
+    NAME_AND_FIRST_EDUCATION=7;
+    FIRST_WORK_AND_FIRST_EDUCATION=8;
+  }
+  Type type=1;
+  int64 fingerPrint=2;
+  string number=3;
+  string docId=4;
+}
+
+message FingerPrintReply {
+  repeated ReplayFeature fingerPrint=1;
+}
