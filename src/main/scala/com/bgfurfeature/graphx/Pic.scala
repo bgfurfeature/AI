@@ -29,8 +29,8 @@ object Pic {
     val company = data.flatMap { x =>
       val list = new ListBuffer[String]
       val parts = x.split("\t")
-      list.+=(parts(0))
-      list.+=:(parts(1))
+      list.+=(parts(1))
+      list.+=:(parts(4))
       list
     }.distinct().zipWithIndex()
 
@@ -46,8 +46,8 @@ object Pic {
 
     val similarities = data.map { x =>
       val list = x.split("\t")
-      if (!list(0).contains("-") && !list(1).contains("-") && !list(2).contains("-")) {
-        (bc.value.get(list(0)).get, bc.value.get(list(1)).get, list(2).toDouble)
+      if (!list(1).contains("-") && !list(4).contains("-") ) {
+        (bc.value.get(list(1)).get, bc.value.get(list(4)).get, list(7).toDouble)
       } else (-1.toLong, -1.toLong, -1.toDouble)
     }.filter(_._1 != -1).cache()
 
