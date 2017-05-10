@@ -75,22 +75,28 @@
             </extension>
         </extensions>
         <plugins>
-            <!--
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <classifier>${os.detected.classifier}</classifier>
                 </configuration>
             </plugin>
+            <!-- mvn protobuf:compile -->
             <plugin>
                 <groupId>org.xolstice.maven.plugins</groupId>
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.5.0</version>
                 <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:3.2.0:exe:${os.detected.classifier}</protocArtifact>
+                    <protocArtifact>com.google.protobuf:protoc:3.3.0:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.3.0:exe:${os.detected.classifier}</pluginArtifact>
                     <protoSourceRoot>${basedir}/src/main/proto</protoSourceRoot>
+                    <attachDescriptorSet>true</attachDescriptorSet>
+                    <writeDescriptorSet>true</writeDescriptorSet>
+                    <pluginExecutable>/usr/local/Cellar/protobuf/3.3.0/bin/protoc</pluginExecutable>
+                    <clearOutputDirectory>false</clearOutputDirectory>
+                    <checkStaleness>false</checkStaleness>
+                    <outputDirectory>${basedir}/scr/main/java</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -101,7 +107,7 @@
                     </execution>
                 </executions>
             </plugin>
-            -->
+
             <!-- GRPC END-->
             <plugin>
                 <groupId>org.scala-tools</groupId>
