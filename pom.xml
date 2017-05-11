@@ -66,6 +66,8 @@
    <!-- 将依赖一起打包 -->
     <build>
         <sourceDirectory>src/main/scala/</sourceDirectory>
+        <plugins>
+        <!-- grpc start
         <extensions>
             <extension>
                 <groupId>kr.motd.maven</groupId>
@@ -102,6 +104,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
