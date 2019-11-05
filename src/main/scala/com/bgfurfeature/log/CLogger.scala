@@ -6,7 +6,7 @@ import org.apache.log4j.{Logger, PropertyConfigurator}
   * Created by C.J.YOU on 2016/1/15.
   * 打log日志的类需要继承此trait
   */
-trait CLogger extends Serializable{
+trait CLogger extends Serializable {
 
 
   // PropertyConfigurator.configure("/home/telecom/conf/log4j.properties")
@@ -15,13 +15,13 @@ trait CLogger extends Serializable{
 
   def logConfigure(path: String) = PropertyConfigurator.configure(path)
 
-  def debug(msg: String) = logger.debug(msg)
+  def debug(msg: String) = logger.debug(s""" => {$msg}""")
 
-  def info(msg: String) = logger.info(msg)
+  def info(msg: String) = logger.info(s""" => {$msg}""")
 
-  def warn(msg: String) = logger.warn(msg + "<<<<==============")
+  def warn(msg: String) = logger.warn(s""" => {$msg}""")
 
-  def error(msg: String) = logger.error(msg)
+  def error(msg: String) = logger.error(s""" => {$msg}""")
 
   def exception(e: Exception) = logger.error(e.getStackTrace)
 

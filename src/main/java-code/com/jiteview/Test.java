@@ -25,14 +25,5 @@ public class Test {
         System.out.println(3 * 0.1 == 0.3); // false
 
 
-
-
-
-
-
-
-
-
-
     }
 }
