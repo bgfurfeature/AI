@@ -1,7 +1,7 @@
 package com.usercase.stock
 
 import com.bgfurfeature.config.Dom4jParser
-import com.bgfurfeature.kafka.{KafkaConsumer, KafkaProducer}
+import com.bgfurfeature.kafka.{KafkaConsumerCustom, KafkaProducerCustom}
 import com.bgfurfeature.log.CLogger
 import com.bgfurfeature.spark.Spark
 import com.bgfurfeature.util.{FileUtil, StringUtil}
@@ -109,7 +109,7 @@ object SHStockHeatExceptionLevel extends  CLogger {
     val ssc = spark.ssc
     val sc = spark.sc
 
-    val kafkaProducer = KafkaProducer.apply(parser)
+    val kafkaProducer = KafkaProducerCustom.apply(parser)
 
     // local 获取数据
     if(getStreamingOrLocal == "LocalData") {
@@ -131,7 +131,7 @@ object SHStockHeatExceptionLevel extends  CLogger {
     } else if(getStreamingOrLocal == "Streaming") {
 
       // 从实时流里获取数据
-      val kafkaData = KafkaConsumer.apply(parser).getStreaming(ssc)
+      val kafkaData = KafkaConsumerCustom.apply(parser).getStreaming(ssc)
 
       val rdd = kafkaData.flatMap(x =>flatMapFun(x._2)).filter(x => x != "" || !x.isEmpty).map(reformatData)
         .foreachRDD { org =>

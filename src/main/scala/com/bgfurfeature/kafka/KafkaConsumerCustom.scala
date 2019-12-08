@@ -11,7 +11,7 @@ import org.apache.spark.streaming.kafka.KafkaUtils
 /*
  kafka消费者
  */
-class KafkaConsumer(parameter: Parameter) {
+class KafkaConsumerCustom(parameter: Parameter) {
 
   private val zkQuorum = parameter.getParameterByTagName("kafka.zkQuorum")
 
@@ -42,20 +42,21 @@ class KafkaConsumer(parameter: Parameter) {
       "auto.offset.reset" -> "largest")
     KafkaUtils.createStream[String, String, StringDecoder, StringDecoder](
       ssc, kafkaParams, topics, storageLevel)
+    KafkaUtils
   }
 
   def getStreaming(ssc: StreamingContext)  = createStream(ssc, zkQuorum, groupId, topics)
 
 }
 
-object KafkaConsumer {
+object KafkaConsumerCustom {
 
 
-  private var kc: KafkaConsumer = null
+  private var kc: KafkaConsumerCustom = null
 
-  def apply(parameter: Parameter): KafkaConsumer = {
+  def apply(parameter: Parameter): KafkaConsumerCustom = {
 
-    if(kc == null) kc = new KafkaConsumer(parameter)
+    if(kc == null) kc = new KafkaConsumerCustom(parameter)
 
     kc
 

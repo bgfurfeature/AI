@@ -1,3 +1,4 @@
+/*
 package com.bgfurfeature.hadoop
 
 import org.apache.hadoop.conf.Configuration
@@ -65,3 +66,4 @@ object WordCount {
   }
 
 }
+*/

@@ -15,7 +15,7 @@ import kafka.producer.{KeyedMessage, ProducerConfig}
   *
   * @param parameter 外部参数传入
   */
-class KafkaProducer(parameter: Parameter) {
+class KafkaProducerCustom(parameter: Parameter) {
 
     private val sendTopic = parameter.getParameterByTagName("kafka.sendTopic")
 
@@ -43,13 +43,13 @@ class KafkaProducer(parameter: Parameter) {
 
 }
 
-object KafkaProducer {
+object KafkaProducerCustom {
 
-    private  var kp: KafkaProducer = null
+    private  var kp: KafkaProducerCustom = null
 
-    def apply(parameter: Parameter): KafkaProducer = {
+    def apply(parameter: Parameter): KafkaProducerCustom = {
 
-        if (kp == null) kp = new KafkaProducer(parameter)
+        if (kp == null) kp = new KafkaProducerCustom(parameter)
 
         kp
 
