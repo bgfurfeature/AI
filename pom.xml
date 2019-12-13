@@ -31,7 +31,8 @@
   <inceptionYear>2008</inceptionYear>
   <properties>
       <!--pom 变量引用声明 -->
-    <scala.version>2.11.8</scala.version>
+      <scala.version>2.11.8</scala.version>
+      <scala.version>2.3.1</scala.version>
   </properties>
 
   <repositories>
@@ -40,19 +41,30 @@
       <name>Scala-Tools Maven2 Repository</name>
       <url>http://scala-tools.org/repo-releases</url>
     </repository>
-
-      <repository>
-          <id>cloudera.com</id>
-          <name>mvn-repository</name>
-          <url>https://repository.cloudera.com/content/repositories/releases/</url>
-          <layout>default</layout>
-          <releases>
-              <enabled>true</enabled>
-          </releases>
-          <snapshots>
-              <enabled>false</enabled>
-          </snapshots>
-      </repository>
+    <repository>
+        <id>mvn.com</id>
+        <name>mvn-repository</name>
+        <url>https://repo1.maven.org/maven2/</url>
+        <layout>default</layout>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+  <repository>
+      <id>cloudera.com</id>
+      <name>mvn-repository</name>
+      <url>https://repository.cloudera.com/content/repositories/releases/</url>
+      <layout>default</layout>
+      <releases>
+          <enabled>false</enabled>
+      </releases>
+      <snapshots>
+          <enabled>false</enabled>
+      </snapshots>
+  </repository>
   </repositories>
 
   <pluginRepositories>
@@ -180,314 +192,338 @@
   <!---  依赖jar  -->
   <dependencies>
 
-    <!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
-    <dependency>
-      <groupId>dom4j</groupId>
-      <artifactId>dom4j</artifactId>
-      <version>1.6.1</version>
-    </dependency>
+  <dependency><!-- Redis Jedis -->
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <version>2.9.0</version>
+      <type>jar</type>
+      <scope>compile</scope>
+  </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-graphx_2.11 -->
-    <dependency>
-      <groupId>org.apache.spark</groupId>
-      <artifactId>spark-graphx_2.11</artifactId>
-      <version>2.0.2</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
+<dependency>
+  <groupId>dom4j</groupId>
+  <artifactId>dom4j</artifactId>
+  <version>1.6.1</version>
+</dependency>
 
-    <dependency>
-      <groupId>org.apache.spark</groupId>
-      <artifactId>spark-streaming-kafka-0-8_2.11</artifactId>
-      <version>2.0.1</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-graphx_2.11 -->
+<dependency>
+  <groupId>org.apache.spark</groupId>
+  <artifactId>spark-graphx_2.11</artifactId>
+  <version>2.0.2</version>
+</dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.json/json -->
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20140107</version>
-    </dependency>
+<dependency>
+  <groupId>org.apache.spark</groupId>
+  <artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
+  <version>2.3.0</version>
+</dependency>
+<dependency>
+  <groupId>org.apache.spark</groupId>
+  <artifactId>spark-streaming-kafka-0-8_2.11</artifactId>
+  <version>2.0.1</version>
+</dependency>
 
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.json/json -->
+<dependency>
+  <groupId>org.json</groupId>
+  <artifactId>json</artifactId>
+  <version>20140107</version>
+</dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-compiler -->
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-compiler</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
+<dependency>
+  <groupId>org.scala-lang</groupId>
+  <artifactId>scala-library</artifactId>
+  <version>${scala.version}</version>
+</dependency>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.4</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.specs</groupId>
-      <artifactId>specs</artifactId>
-      <version>1.2.5</version>
-      <scope>test</scope>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.scala-lang/scala-compiler -->
+<dependency>
+  <groupId>org.scala-lang</groupId>
+  <artifactId>scala-compiler</artifactId>
+  <version>${scala.version}</version>
+</dependency>
 
-      <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-server -->
-      <dependency>
-          <groupId>org.apache.hbase</groupId>
-          <artifactId>hbase-server</artifactId>
-          <version>1.2.0</version>
-      </dependency>
+<dependency>
+  <groupId>junit</groupId>
+  <artifactId>junit</artifactId>
+  <version>4.4</version>
+  <scope>test</scope>
+</dependency>
+<dependency>
+  <groupId>org.specs</groupId>
+  <artifactId>specs</artifactId>
+  <version>1.2.5</version>
+  <scope>test</scope>
+</dependency>
 
-      <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
-      <dependency>
-          <groupId>org.apache.hbase</groupId>
-          <artifactId>hbase-client</artifactId>
-          <version>1.2.0</version>
-      </dependency>
+  <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-server -->
+  <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-server</artifactId>
+      <version>1.2.0</version>
+  </dependency>
 
-      <!-- Use this dependency if you are using the DataStream API -->
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-streaming-scala_2.11</artifactId>
-      <version>1.1.3</version>
-    </dependency>
-    <!-- Use this dependency if you are using the DataSet API -->
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-scala_2.11</artifactId>
-      <version>1.1.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-clients_2.11</artifactId>
-      <version>1.1.3</version>
-    </dependency>
+  <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
+  <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-client</artifactId>
+      <version>1.2.0</version>
+  </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-streaming_2.11 -->
-    <dependency>
-      <groupId>org.apache.spark</groupId>
-      <artifactId>spark-streaming_2.11</artifactId>
-      <version>2.0.2</version>
-    </dependency>
+  <!-- Use this dependency if you are using the DataStream API -->
+<dependency>
+  <groupId>org.apache.flink</groupId>
+  <artifactId>flink-streaming-scala_2.11</artifactId>
+  <version>1.1.3</version>
+</dependency>
+<!-- Use this dependency if you are using the DataSet API -->
+<dependency>
+  <groupId>org.apache.flink</groupId>
+  <artifactId>flink-scala_2.11</artifactId>
+  <version>1.1.3</version>
+</dependency>
+<dependency>
+  <groupId>org.apache.flink</groupId>
+  <artifactId>flink-clients_2.11</artifactId>
+  <version>1.1.3</version>
+</dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib_2.11 -->
-    <dependency>
-      <groupId>org.apache.spark</groupId>
-      <artifactId>spark-mllib_2.11</artifactId>
-      <version>2.0.2</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-streaming_2.11 -->
+<dependency>
+  <groupId>org.apache.spark</groupId>
+  <artifactId>spark-streaming_2.11</artifactId>
+  <version>2.0.2</version>
+</dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
-    <dependency>
-      <groupId>org.apache.zookeeper</groupId>
-      <artifactId>zookeeper</artifactId>
-      <version>3.4.9</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib_2.11 -->
+<dependency>
+  <groupId>org.apache.spark</groupId>
+  <artifactId>spark-mllib_2.11</artifactId>
+  <version>2.0.2</version>
+</dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-client</artifactId>
-      <version>2.7.3</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
+<dependency>
+  <groupId>org.apache.zookeeper</groupId>
+  <artifactId>zookeeper</artifactId>
+  <version>3.4.9</version>
+</dependency>
 
-    <!-- Apache Commons Collections -->
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-collections4</artifactId>
-      <version>4.0</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
+<dependency>
+  <groupId>org.apache.hadoop</groupId>
+  <artifactId>hadoop-client</artifactId>
+  <version>2.7.3</version>
+</dependency>
 
-    <!-- https://mvnrepository.com/artifact/com.ning/async-http-client -->
-    <dependency>
-      <groupId>com.ning</groupId>
-      <artifactId>async-http-client</artifactId>
-      <version>1.7.6</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/net.databinder.dispatch/dispatch-core_2.10 -->
-    <dependency>
-      <groupId>net.databinder.dispatch</groupId>
-      <artifactId>dispatch-core_2.10</artifactId>
-      <version>0.11.0</version>
-    </dependency>
+<!-- Apache Commons Collections -->
+<dependency>
+  <groupId>org.apache.commons</groupId>
+  <artifactId>commons-collections4</artifactId>
+  <version>4.0</version>
+</dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch -->
-    <dependency>
-      <groupId>org.elasticsearch</groupId>
-      <artifactId>elasticsearch</artifactId>
-      <version>5.1.1</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/com.ning/async-http-client -->
+<dependency>
+  <groupId>com.ning</groupId>
+  <artifactId>async-http-client</artifactId>
+  <version>1.7.6</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/net.databinder.dispatch/dispatch-core_2.10 -->
+<dependency>
+  <groupId>net.databinder.dispatch</groupId>
+  <artifactId>dispatch-core_2.10</artifactId>
+  <version>0.11.0</version>
+</dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch-spark_2.11 -->
-    <dependency>
-      <groupId>org.elasticsearch</groupId>
-      <artifactId>elasticsearch-spark_2.11</artifactId>
-      <version>2.3.3</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch -->
+<dependency>
+  <groupId>org.elasticsearch</groupId>
+  <artifactId>elasticsearch</artifactId>
+  <version>5.1.1</version>
+</dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.elasticsearch.client/transport -->
-    <dependency>
-      <groupId>org.elasticsearch.client</groupId>
-      <artifactId>transport</artifactId>
-      <version>5.0.0</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch-spark_2.11 -->
+<dependency>
+  <groupId>org.elasticsearch</groupId>
+  <artifactId>elasticsearch-spark_2.11</artifactId>
+  <version>2.3.3</version>
+</dependency>
 
-
-    <!-- https://mvnrepository.com/artifact/com.github.pathikrit/better-files_2.11 -->
-    <dependency>
-      <groupId>com.github.pathikrit</groupId>
-      <artifactId>better-files_2.11</artifactId>
-      <version>2.17.1</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/org.apache.hive/hive-exec -->
-    <dependency>
-      <groupId>org.apache.hive</groupId>
-      <artifactId>hive-exec</artifactId>
-      <version>2.1.1</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/com.hankcs/hanlp -->
-    <dependency>
-      <groupId>com.hankcs</groupId>
-      <artifactId>hanlp</artifactId>
-      <version>portable-1.3.2</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.elasticsearch.client/transport -->
+<dependency>
+  <groupId>org.elasticsearch.client</groupId>
+  <artifactId>transport</artifactId>
+  <version>5.0.0</version>
+</dependency>
 
 
-    <!-- https://mvnrepository.com/artifact/junit/junit -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/com.github.pathikrit/better-files_2.11 -->
+<dependency>
+  <groupId>com.github.pathikrit</groupId>
+  <artifactId>better-files_2.11</artifactId>
+  <version>2.17.1</version>
+</dependency>
 
-    <!-- Spring -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>3.2.12.RELEASE</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.hive/hive-exec -->
+<dependency>
+  <groupId>org.apache.hive</groupId>
+  <artifactId>hive-exec</artifactId>
+  <version>2.1.1</version>
+</dependency>
 
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
-      <version>3.2.12.RELEASE</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Protostuff -->
-    <dependency>
-      <groupId>com.dyuproject.protostuff</groupId>
-      <artifactId>protostuff-core</artifactId>
-      <version>1.0.8</version>
-    </dependency>
-    <dependency>
-      <groupId>com.dyuproject.protostuff</groupId>
-      <artifactId>protostuff-runtime</artifactId>
-      <version>1.0.8</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/com.hankcs/hanlp -->
+<dependency>
+  <groupId>com.hankcs</groupId>
+  <artifactId>hanlp</artifactId>
+  <version>portable-1.3.2</version>
+</dependency>
 
 
-    <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
-    <dependency>
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>1.7.2</version>
-    </dependency>
+<!-- https://mvnrepository.com/artifact/junit/junit -->
+<dependency>
+  <groupId>junit</groupId>
+  <artifactId>junit</artifactId>
+  <version>4.12</version>
+</dependency>
 
-    <!-- https://mvnrepository.com/artifact/io.vertx/vertx-core(RECOM:io.vertx:vertx-core:jar:3.3.3) -->
-    <dependency>
-        <groupId>io.vertx</groupId>
-        <artifactId>vertx-core</artifactId>
-        <version>3.4.1</version>
-    </dependency>
+<!-- Spring -->
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-context</artifactId>
+  <version>3.2.12.RELEASE</version>
+</dependency>
+
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-test</artifactId>
+  <version>3.2.12.RELEASE</version>
+  <scope>test</scope>
+</dependency>
+
+<!-- Protostuff -->
+<dependency>
+  <groupId>com.dyuproject.protostuff</groupId>
+  <artifactId>protostuff-core</artifactId>
+  <version>1.0.8</version>
+</dependency>
+<dependency>
+  <groupId>com.dyuproject.protostuff</groupId>
+  <artifactId>protostuff-runtime</artifactId>
+  <version>1.0.8</version>
+</dependency>
 
 
-      <!-- https://mvnrepository.com/artifact/io.vertx/vertx-web -->
-      <dependency>
-          <groupId>io.vertx</groupId>
-          <artifactId>vertx-web</artifactId>
-          <version>3.4.1</version>
-      </dependency>
+<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+<dependency>
+  <groupId>org.jsoup</groupId>
+  <artifactId>jsoup</artifactId>
+  <version>1.7.2</version>
+</dependency>
 
-      <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-scala_2.11 -->
-      <dependency>
-          <groupId>com.fasterxml.jackson.module</groupId>
-          <artifactId>jackson-module-scala_2.11</artifactId>
-          <version>2.8.1</version>
-      </dependency>
+<!-- https://mvnrepository.com/artifact/io.vertx/vertx-core(RECOM:io.vertx:vertx-core:jar:3.3.3) -->
+<dependency>
+    <groupId>io.vertx</groupId>
+    <artifactId>vertx-core</artifactId>
+    <version>3.4.1</version>
+</dependency>
 
-      <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-databind</artifactId>
-          <version>2.8.1</version>
-      </dependency>
-      <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-core</artifactId>
-          <version>2.8.1</version>
-      </dependency>
-      <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-annotations</artifactId>
-          <version>2.8.1</version>
-      </dependency>
 
-      <!-- https://mvnrepository.com/artifact/us.codecraft/webmagic-core -->
-      <dependency>
-          <groupId>us.codecraft</groupId>
-          <artifactId>webmagic-core</artifactId>
-          <version>0.6.1</version>
-      </dependency>
+  <!-- https://mvnrepository.com/artifact/io.vertx/vertx-web -->
+  <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web</artifactId>
+      <version>3.4.1</version>
+  </dependency>
 
-      <!-- https://mvnrepository.com/artifact/us.codecraft/webmagic-extension -->
-      <dependency>
-          <groupId>us.codecraft</groupId>
-          <artifactId>webmagic-extension</artifactId>
-          <version>0.6.1</version>
-          <exclusions>
-              <exclusion>
-                  <groupId>org.slf4j</groupId>
-                  <artifactId>slf4j-log4j12</artifactId>
-              </exclusion>
-          </exclusions>
-      </dependency>
+  <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-scala_2.11 -->
+  <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-scala_2.11</artifactId>
+      <version>2.8.1</version>
+  </dependency>
 
-      <!-- https://mvnrepository.com/artifact/com.sangupta/murmur -->
-      <dependency>
-          <groupId>com.sangupta</groupId>
-          <artifactId>murmur</artifactId>
-          <version>1.0.0</version>
-      </dependency>
+  <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+  <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.8.1</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+  <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.8.1</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+  <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>2.8.1</version>
+  </dependency>
 
-      <dependency>
-          <groupId>io.grpc</groupId>
-          <artifactId>grpc-netty</artifactId>
-          <version>1.3.0</version>
-      </dependency>
-      <dependency>
-          <groupId>io.grpc</groupId>
-          <artifactId>grpc-protobuf</artifactId>
-          <version>1.3.0</version>
-      </dependency>
-      <dependency>
-          <groupId>io.grpc</groupId>
-          <artifactId>grpc-stub</artifactId>
-          <version>1.3.0</version>
-      </dependency>
+  <!-- https://mvnrepository.com/artifact/us.codecraft/webmagic-core -->
+  <dependency>
+      <groupId>us.codecraft</groupId>
+      <artifactId>webmagic-core</artifactId>
+      <version>0.6.1</version>
+  </dependency>
 
-      <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
-      <dependency>
-          <groupId>com.google.protobuf</groupId>
-          <artifactId>protobuf-java</artifactId>
-          <version>3.2.0</version>
-      </dependency>
+  <!-- https://mvnrepository.com/artifact/us.codecraft/webmagic-extension -->
+  <dependency>
+      <groupId>us.codecraft</groupId>
+      <artifactId>webmagic-extension</artifactId>
+      <version>0.6.1</version>
+      <exclusions>
+          <exclusion>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-log4j12</artifactId>
+          </exclusion>
+      </exclusions>
+  </dependency>
+
+  <!-- https://mvnrepository.com/artifact/com.sangupta/murmur -->
+  <dependency>
+      <groupId>com.sangupta</groupId>
+      <artifactId>murmur</artifactId>
+      <version>1.0.0</version>
+  </dependency>
+
+  <dependency>
+      <groupId>io.grpc</groupId>
+      <artifactId>grpc-netty</artifactId>
+      <version>1.3.0</version>
+  </dependency>
+  <dependency>
+      <groupId>io.grpc</groupId>
+      <artifactId>grpc-protobuf</artifactId>
+      <version>1.3.0</version>
+  </dependency>
+  <dependency>
+      <groupId>io.grpc</groupId>
+      <artifactId>grpc-stub</artifactId>
+      <version>1.3.0</version>
+  </dependency>
+
+  <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
+  <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>3.2.0</version>
+  </dependency>
+  <dependency>
+      <groupId>c3p0</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.1.2</version>
+  </dependency>
+
+  <dependency><!-- Mysql -->
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.31</version>
+  </dependency>
 
   </dependencies>
 
