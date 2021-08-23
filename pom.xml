@@ -420,7 +420,7 @@
 <dependency>
   <groupId>org.jsoup</groupId>
   <artifactId>jsoup</artifactId>
-  <version>1.7.2</version>
+  <version>1.14.2</version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/io.vertx/vertx-core(RECOM:io.vertx:vertx-core:jar:3.3.3) -->
