@@ -435,7 +435,7 @@
   <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
-      <version>3.4.1</version>
+      <version>3.9.4</version>
   </dependency>
 
   <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-scala_2.11 -->
